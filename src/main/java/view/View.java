@@ -4,9 +4,13 @@ import als.Project;
 import controller.Controller;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.basic.BasicFileChooserUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +90,7 @@ public class View extends JFrame implements ActionListener {
 
     public File openProject() {
         File file=null;
-        JFileChooser fileChooser=new JFileChooser();
+        JFileChooser fileChooser=new JFileChooser("C:\\Users\\DENIS-SDA\\Desktop\\");
 
         UIManager.put(
                 "FileChooser.saveButtonText", "Сохранить");
@@ -102,25 +106,28 @@ public class View extends JFrame implements ActionListener {
                 "FileChooser.saveInLabelText", "Сохранить в директории");
         UIManager.put(
                 "FileChooser.folderNameLabelText", "Путь директории");
-        String[][] FILTERS = {{"docx", "Файлы Word (*.docx)"},
-                {"pdf" , "Adobe Reader(*.pdf)"}};
+        String[][] FILTERS = {
+                {"XML(*.xml)","xml" },
+                {"Файлы Проект АКХ (*.alx)","alx"},
+        };
 
         fileChooser.setDialogTitle("Выберите файл");
         // Определяем фильтры типов файлов
-        for (int i = 0; i < FILTERS[0].length; i++) {
-            FileFilterExt eff = new FileFilterExt(FILTERS[i][0],
+        for (int i = 0; i < FILTERS.length; i++) {
+            FileNameExtensionFilter ff= new FileNameExtensionFilter (FILTERS[i][0],
                     FILTERS[i][1]);
-            fileChooser.addChoosableFileFilter(eff);
-        }
+            fileChooser.setFileFilter(ff);
 
+        }
+        fileChooser.setAcceptAllFileFilterUsed(false);
         // Определение режима - только файл
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int result = fileChooser.showOpenDialog(this);
         // Если файл выбран, покажем его в сообщении
         if (result == JFileChooser.APPROVE_OPTION )
             JOptionPane.showMessageDialog(this,
-                    "Выбран файл ( " +
-                            fileChooser.getSelectedFile() + " )");
+                    "Выбран файл  " +
+                            fileChooser.getSelectedFile());
         file=fileChooser.getSelectedFile();
         return file;
     }
@@ -129,59 +136,57 @@ public class View extends JFrame implements ActionListener {
 
     }
 
-    public File saveProjectAs() {
-        File file=null;
-        JFileChooser fileChooser=new JFileChooser();
+    public File saveProjectAs(String fileName) {
+        String saveDirectory="C:\\Users\\DENIS-SDA\\Desktop\\";
+        File file=new File(saveDirectory+"\\"+fileName+"."+"alx");
+        JFileChooser fileChooser=new JFileChooser(saveDirectory);
+        fileChooser.setCurrentDirectory(file);
         fileChooser.setDialogTitle("Сохранение файла");
-        String[][] FILTERS = {{"alx", "Файлы Проект АКХ (*.alx)"},
-                {"xml" , "XML(*.xml)"}};
+        fileChooser.setSelectedFile(file);
+        String[][] FILTERS = {
+                {"XML(*.xml)","xml" },
+                {"Файлы Word (*.docx)","docx" },
+                {"Adobe Reader(*.pdf)","pdf" },
+                {"Image(*.jpg)","jpg"  },
+                {"Файлы Проект АКХ (*.alx)","alx" }
+        };
         // Определяем фильтры типов файлов
-        for (int i = 0; i < FILTERS[0].length; i++) {
-            FileFilterExt eff = new FileFilterExt(FILTERS[i][0],
+        for (int i = 0; i < FILTERS.length; i++) {
+            FileNameExtensionFilter ff= new FileNameExtensionFilter (FILTERS[i][0],
                     FILTERS[i][1]);
-            fileChooser.addChoosableFileFilter(eff);
+            fileChooser.setFileFilter(ff);
         }
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.addPropertyChangeListener(JFileChooser.FILE_FILTER_CHANGED_PROPERTY, new PropertyChangeListener()
+        {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                String currentDir = ((BasicFileChooserUI)fileChooser.getUI()).getDirectoryName();
+                String currentName = ((BasicFileChooserUI)fileChooser.getUI()).getFileName();
+                String currentPath=currentDir+currentName;
+                FileNameExtensionFilter ff= (FileNameExtensionFilter) e.getNewValue();
+                File file=new File(currentName.substring(0,currentName.lastIndexOf("."))+"."+ff.getExtensions()[0]);
+                fileChooser.setSelectedFile(file);
+            }
+        });
         // Определение режима - только файл
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int result = fileChooser.showSaveDialog(this);
-        // Если файл выбран, то представим его в сообщении
-        if (result == JFileChooser.APPROVE_OPTION ) {
-            JOptionPane.showMessageDialog(this,
-                    "Файл '" + fileChooser.getSelectedFile() +
-                            " ) сохранен");
-           file=fileChooser.getSelectedFile();
-
+        FileNameExtensionFilter ff= (FileNameExtensionFilter) fileChooser.getFileFilter();
+        file=fileChooser.getSelectedFile();
+        if (!file.getName().contains("."))
+        file=new File(file.getPath()+"."+ff.getExtensions()[0]);
+        else {
+            file=new File(file.getPath().substring(0,file.getPath().lastIndexOf("."))+"."+ff.getExtensions()[0]);
         }
+        fileChooser.setSelectedFile(file);
+        if (result == JFileChooser.APPROVE_OPTION )
+            JOptionPane.showMessageDialog(fileChooser,
+                    "Файл " + fileChooser.getSelectedFile() +
+                            " сохранен");
+        else file=null;
         return file;
     }
 
-    class FileFilterExt extends javax.swing.filechooser.FileFilter
-    {
-        String extension  ;  // расширение файла
-        String description;  // описание типа файлов
-
-        FileFilterExt(String extension, String descr)
-        {
-            this.extension = extension;
-            this.description = descr;
-        }
-        @Override
-        public boolean accept(java.io.File file)
-        {
-            if(file != null) {
-                if (file.isDirectory())
-                    return true;
-                if( extension == null )
-                    return (extension.length() == 0);
-                return file.getName().endsWith(extension);
-            }
-            return false;
-        }
-        // Функция описания типов файлов
-        @Override
-        public String getDescription() {
-            return description;
-        }
-    }
 }
 
