@@ -92,9 +92,10 @@ public class ALSInfoPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 als.getParentProject().deleteALS(als);
-                ALSPanel alsPanel= (ALSPanel) getParent();
-                getParent().getParent().remove(alsPanel);
-                getParent().revalidate();
+                ALSPanel alsPanel= (ALSPanel) getParent().getParent();
+                getParent().getParent().getParent().remove(alsPanel);
+
+                getParent().getParent().revalidate();
                 repaint();
             }
         });

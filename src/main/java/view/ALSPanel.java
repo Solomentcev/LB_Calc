@@ -6,37 +6,52 @@ import als.LB;
 import als.TypeLb;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.awt.Component.*;
+
 public class ALSPanel extends JPanel {
     private ALSInfoPanel alsInfoPanel;
     private LCPanel lcpanel;
+    private DrawALS imageALSPanel;
 
     public List<LBPanel> getLBPanelList() {
         return LBPanelList;
     }
-
+    JPanel p1=new JPanel();
+    JPanel p2=new JPanel();
     private List<LBPanel> LBPanelList;
    // private LBPanel lbPanel;
 
     public ALSPanel(ALS als) {
 
-        //this.setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
-        this.setLayout(new FlowLayout(FlowLayout.LEADING));
-        this.alsInfoPanel = new ALSInfoPanel(als);
-        this.add(this.alsInfoPanel);
+        this.setLayout(new BorderLayout());
+        p1.setLayout (new FlowLayout(FlowLayout.LEFT));
+        this.add(p1, BorderLayout.NORTH);
+        alsInfoPanel = new ALSInfoPanel(als);
+        p1.add(alsInfoPanel);
 
-        this.lcpanel = new LCPanel(als.getLc());
-        this.add(this.lcpanel);
+        lcpanel = new LCPanel(als.getLc());
+        p1.add(lcpanel);
 
         LBPanelList=new ArrayList<>();
         for (LB lb : als.getLbList()) {
             addLBPanel(lb);
         }
+        this.add(p1, BorderLayout.NORTH);
+
+        imageALSPanel=new DrawALS(als);
+        p2.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED ));
+        p2.setLayout(new FlowLayout(FlowLayout.LEFT));
+        p2.add(imageALSPanel);
+        this.add(p2,BorderLayout.SOUTH);
+
+
         alsInfoPanel.getDepthALS().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,6 +64,7 @@ public class ALSPanel extends JPanel {
                 }
                 alsInfoPanel.refreshALSInfo(als);
                 refreshALSPanel(als);
+                imageALSPanel.refreshDrawAls(als);
                 revalidate();
                 repaint();
             }
@@ -64,6 +80,7 @@ public class ALSPanel extends JPanel {
                 }
                 alsInfoPanel.refreshALSInfo(als);
                 refreshALSPanel(als);
+                imageALSPanel.refreshDrawAls(als);
                 revalidate();
                 repaint();
             }
@@ -73,6 +90,7 @@ public class ALSPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 addLBPanel(als.addLb());
                 alsInfoPanel.refreshALSInfo(als);
+                imageALSPanel.refreshDrawAls(als);
                 revalidate();
                 repaint();
             }
@@ -97,6 +115,7 @@ public class ALSPanel extends JPanel {
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
                 alsInfoPanel.refreshALSInfo(lb.getParentALS());
+                imageALSPanel.refreshDrawAls(lb.getParentALS());
                 revalidate();
                 repaint();
             }
@@ -114,6 +133,7 @@ public class ALSPanel extends JPanel {
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
                 alsInfoPanel.refreshALSInfo(lb.getParentALS());
+                imageALSPanel.refreshDrawAls(lb.getParentALS());
                 revalidate();
                 repaint();
             }
@@ -131,7 +151,7 @@ public class ALSPanel extends JPanel {
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
                 alsInfoPanel.refreshALSInfo(lb.getParentALS());
-
+                imageALSPanel.refreshDrawAls(lb.getParentALS());
                 revalidate();
                 repaint();
             }
@@ -144,6 +164,7 @@ public class ALSPanel extends JPanel {
                 als.deleteLB(lb);
                 deleteLBPanel(lbPanel);
                 refreshALSPanel(als);
+                imageALSPanel.refreshDrawAls(als);
                 revalidate();
                 repaint();
             }
@@ -158,11 +179,13 @@ public class ALSPanel extends JPanel {
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
                 alsInfoPanel.refreshALSInfo(lb.getParentALS());
+                imageALSPanel.refreshDrawAls(lb.getParentALS());
                 revalidate();
                 repaint();
             }
         });
-        this.add(lbPanel);
+        p1.add(lbPanel);
+
         revalidate();
         repaint();
         return lbPanel;

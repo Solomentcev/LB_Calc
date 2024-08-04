@@ -54,5 +54,7 @@ public class DrawLB extends JPanel {
         countCells=lb.getCountCells();
         heightCell=lb.getHeightCell();
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
+        revalidate();
+        repaint();
     }
 }

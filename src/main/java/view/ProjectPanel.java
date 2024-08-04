@@ -4,6 +4,7 @@ import als.ALS;
 import als.Project;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ public class ProjectPanel extends JPanel{
     private JLabel projectName;
     private JTextField companyLabel;
     private JButton addALSButton;
+
     private JPanel jpanel;
     private ALSPanel alsPanel;
     private List<ALSPanel> alsPanelList;
@@ -51,23 +53,29 @@ public class ProjectPanel extends JPanel{
                 repaint();
             }
         });
+
         jpanel=new JPanel();
         jpanel.setLayout(new BoxLayout(jpanel, BoxLayout.Y_AXIS));
+
         alsPanelList=new ArrayList<>();
         for (ALS als:project.getAlsList()){
+
             alsPanel = new ALSPanel(als);
             alsPanelList.add(alsPanel);
             alsPanel.setBorder(BorderFactory.createTitledBorder(
                     BorderFactory.createLoweredBevelBorder(), "ALSPanel"+(alsPanelList.indexOf(alsPanel)+1)));
+
             jpanel.add(alsPanel);
         }
         JScrollPane scrollPane=new JScrollPane(jpanel);
         this.add(scrollPane);
+
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
     }
     public ALSPanel addPanel(ALS als){
+
         ALSPanel panel=new ALSPanel(als);
         alsPanelList.add(panel);
         panel.setBorder(BorderFactory.createTitledBorder(

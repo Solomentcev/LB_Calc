@@ -35,5 +35,7 @@ public class DrawLC extends JPanel {
         bottomFrame=lc.getParentALS().getBottomFrame();
         upperFrame=lc.getParentALS().getUpperFrame();
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
+        revalidate();
+        repaint();
     }
 }
