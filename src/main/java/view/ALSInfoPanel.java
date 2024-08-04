@@ -17,7 +17,7 @@ public class ALSInfoPanel extends JPanel {
     private JLabel upperFrameALS=new JLabel();
     private JLabel bottomFrameALS=new JLabel();
     private JLabel depthCellALS=new JLabel();
-    private JButton addLBButton= new JButton("Добавить Модуль хранения");
+    private JButton addLBButton= new JButton("Добавить МХ");
     private JButton deleteALSButton= new JButton("Удалить");
 
     public JTextField getHeightALS() {

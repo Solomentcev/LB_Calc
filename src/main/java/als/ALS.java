@@ -6,6 +6,7 @@ import java.util.*;
 public class ALS implements Serializable {
     private Project parentProject;
     private String name;
+    private String description;
     private int height;
     private int depth;
     private int width;
@@ -71,7 +72,8 @@ public class ALS implements Serializable {
         countCells = countCells + lb.getCountCells();
         width = width + lb.getWidth();
         System.out.println("ДОБАВЛЕН в АКХ: "+lb.getName());
-        name="АКХ на "+ countCells +" ячеек, ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+        name=getName();
+        description=getDescription();
         System.out.println(name);
         return lb;
     }
@@ -85,8 +87,12 @@ public class ALS implements Serializable {
     }
 
     public String getName() {
+        return name="АКХ на "+ countCells +" ячеек.";
+    }
 
-        return name="АКХ на "+ countCells +" ячеек, ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+    public String getDescription() {
+        description="АКХ на "+ countCells +" ячеек, ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+        return description;
     }
 
     public void setName(String name) {
@@ -186,6 +192,7 @@ public class ALS implements Serializable {
         getWidth();
         getCountCells();
         getName();
+        getDescription();
         System.out.println("ИЗМЕНЕНЫ размеры АКХ");
     }
 

@@ -205,7 +205,7 @@ public class ALSPanel extends JPanel {
     }
     public void deleteLBPanel(LBPanel lbpanel){
         LBPanelList.remove(lbpanel);
-        remove(lbpanel);
+        p1.remove(lbpanel);
         revalidate();
         repaint();
     }

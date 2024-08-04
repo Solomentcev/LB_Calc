@@ -8,6 +8,7 @@ import java.util.Objects;
 public class LB implements Serializable {
     private ALS parentALS;
     private String name;
+    private String description;
     private TypeLb type;
     private int height;
     private int width;
@@ -49,7 +50,8 @@ public class LB implements Serializable {
         widthCell = width -type.getDeltaWidth();
         depthCell=depth-20;
         heightCell = (height - upperFrame - bottomFrame - ((numCells - 1) * shelfThick)) / numCells;
-        name="Модуль хранения на "+numCells+" ячеек("+heightCell+"x"+ widthCell +"x"+depthCell+"), ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+        name=getName();
+        description=getDescription();
         System.out.println("Создан: "+name);
     }
     @Override
@@ -92,7 +94,14 @@ public class LB implements Serializable {
         return height;
     }
     public String getName() {
+        name="Модуль хранения на "+countCells+" ячеек.";
         return name;
+    }
+
+    public String getDescription() {
+        description="Модуль хранения на "+countCells+" ячеек тип-"+type+" ("+heightCell+"x"+ widthCell +"x"+depthCell+")," +
+                " ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+        return description;
     }
 
     public void setHeightLB(int height) throws DimensionException{
@@ -104,7 +113,8 @@ public class LB implements Serializable {
         }
         this.height = height;
         heightCell=(height-upperFrame-bottomFrame-(countCells -1)*shelfThick)/ countCells;
-        name="Модуль хранения на "+countCells+" ячеек("+heightCell+"x"+ widthCell +"x"+depthCell+"), ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+        name=getName();
+        description=getDescription();
         parentALS.updateALS();
     }
     public void setHeightCell(double heightCell) {
@@ -115,7 +125,8 @@ public class LB implements Serializable {
             this.countCells = countCells;
             System.out.println("Изменено кол-во ячеек в модуле хранения №"+(parentALS.getLbList().indexOf(this)+1)+" на " + countCells);
             heightCell = (height - upperFrame - bottomFrame - (countCells - 1) * shelfThick) / countCells;
-            name = "Модуль хранения на " + countCells + " ячеек(" + heightCell + "x" + widthCell + "x" + depthCell + "), ВхШхГ,мм: " + height + "x" + width + "x" + depth + ".";
+            name=getName();
+            description=getDescription();
         } else throw new DimensionException("Слишком большое количество ячеек(Высота ячейки меньше допустимой)");
         parentALS.updateALS();
     }
@@ -129,7 +140,8 @@ public class LB implements Serializable {
         System.out.println("Изменена ширина модуля на:"+ width + " мм");
         widthCell = width -type.getDeltaWidth();
         System.out.println("Изменена ширина ячеек на:"+ widthCell + " мм");
-        name="Модуль хранения на "+countCells+" ячеек("+heightCell+"x"+ widthCell +"x"+depthCell+"), ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+        name=getName();
+        description=getDescription();
         parentALS.updateALS();
     }
     public void setWidthCell(int widthCell) throws DimensionException {
@@ -141,7 +153,8 @@ public class LB implements Serializable {
         System.out.println("ИЗМЕНЕНА ширина ячеек до:"+ widthCell + " мм");
         width = widthCell+type.getDeltaWidth();
         System.out.println("ИЗМЕНЕНА ширина модуля до:"+ width + " мм");
-        name="Модуль хранения на "+countCells+" ячеек("+heightCell+"x"+ widthCell +"x"+depthCell+"), ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+        name=getName();
+        description=getDescription();
         parentALS.updateALS();
 
     }
@@ -152,7 +165,8 @@ public class LB implements Serializable {
             throw new DimensionException("Глубина модуля хранения больше допустимой");
         this.depthCell = depthCell;
         depth = depthCell + 20;
-        name = "Модуль хранения на " + countCells + " ячеек(" + heightCell + "x" + widthCell + "x" + depthCell + "), ВхШхГ,мм: " + height + "x" + width + "x" + depth + ".";
+        name=getName();
+        description=getDescription();
     }
     public void setDepth(int depth) throws DimensionException {
         if (depth>900)
@@ -161,7 +175,8 @@ public class LB implements Serializable {
             throw new DimensionException("Глубина модуля хранения меньше допустимой");
         this.depth = depth;
         depthCell = depth - 20;
-        name = "Модуль хранения на " + countCells + " ячеек(" + heightCell + "x" + widthCell + "x" + depthCell + "), ВхШхГ,мм: " + height + "x" + width + "x" + depth + ".";
+        name=getName();
+        description=getDescription();
     }
     public void setType(String type) throws DimensionException {
         if (((height-upperFrame-bottomFrame-(countCells-1)*TypeLb.valueOf(type).getShelfThick())/ countCells)<85 )
@@ -173,7 +188,8 @@ public class LB implements Serializable {
         widthCell=width-this.type.getDeltaWidth();
         System.out.println("ИЗМЕНЕН тип модуля на: "+type);
         heightCell=(height-upperFrame-bottomFrame-(countCells -1)*shelfThick)/ countCells;
-        name="Модуль хранения на "+countCells+" ячеек("+heightCell+"x"+ widthCell +"x"+depthCell+"), ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+        name=getName();
+        description=getDescription();
     }
 
     public int getShelfThick() {

@@ -6,6 +6,7 @@ import java.util.*;
 public class LC implements Serializable {
     private ALS parentALS;
     private String name;
+    private String description;
     private int height;
     private int width;
     private int depth;
@@ -34,12 +35,19 @@ public class LC implements Serializable {
         this.height=height;
         this.depth=depth;
         width = 300;
-        name = "Модуль управления, ВхШхГ,мм: " + height + "x" + width + "x" + depth + ".";
+        name = getName();
+        description=getDescription();
         System.out.println("СОЗДАН: " + name);
     }
 
     public String getName() {
+        name = "Модуль управления.";
         return name;
+    }
+
+    public String getDescription() {
+        description = "Модуль управления, ВхШхГ,мм: " + height + "x" + width + "x" + depth + ".";
+        return description;
     }
 
     public void setName(String name) {
@@ -57,7 +65,8 @@ public class LC implements Serializable {
             throw new DimensionException("Высота модуля управления меньше допустимой");
         this.height = height;
         System.out.println("Изменена высота модуля управления на:"+ height + " мм");
-        name = "Модуль управления, ВхШхГ,мм: " + height + "x" + width + "x" + depth + ".";
+        name = getName();
+        description=getDescription();
         parentALS.updateALS();
     }
 
@@ -72,7 +81,8 @@ public class LC implements Serializable {
             throw new DimensionException("Глубина модуля управления больше допустимой");
         this.depth = depth;
         System.out.println("Изменена глубина модуля управления на:"+ depth + " мм");
-        name = "Модуль управления, ВхШхГ,мм: " + height + "x" + width + "x" + depth + ".";
+        name = getName();
+        description=getDescription();
         parentALS.updateALS();
     }
 
@@ -87,7 +97,8 @@ public class LC implements Serializable {
             throw new DimensionException("Ширина модуля управления больше допустимой");
         this.width = width;
         System.out.println("Изменена ширина модуля управления на:"+ width + " мм");
-        name = "Модуль управления, ВхШхГ,мм: " + height + "x" + width + "x" + depth + ".";
+        name = getName();
+        description=getDescription();
         parentALS.updateALS();
     }
     public Map<String,String> getInfoLC(){
