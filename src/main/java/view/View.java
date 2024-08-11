@@ -64,7 +64,7 @@ public class View extends JFrame implements ActionListener {
 
     public void initGui() {
         initMenuBar();
-        setPreferredSize(new Dimension(1000,800));
+        setMinimumSize(new Dimension(500,200));
         pack();
     }
     public void showAbout() {
@@ -83,6 +83,7 @@ public class View extends JFrame implements ActionListener {
 
       //  getContentPane().add(projectTabbedPane,BorderLayout.CENTER);
         getContentPane().add(projectTabPanel,BorderLayout.CENTER);
+        setMinimumSize(new Dimension(500,200));
         pack();
         return (ProjectPanel) projectTabPanel.getSelectedComponent();
     }
@@ -148,6 +149,7 @@ public class View extends JFrame implements ActionListener {
                 {"Файлы Word (*.docx)","docx" },
                 {"Adobe Reader(*.pdf)","pdf" },
                 {"Image(*.jpg)","jpg"  },
+                {"Image(*.png)","png"  },
                 {"Файлы Проект АКХ (*.alx)","alx" }
         };
         // Определяем фильтры типов файлов
@@ -165,26 +167,55 @@ public class View extends JFrame implements ActionListener {
                 String currentName = ((BasicFileChooserUI)fileChooser.getUI()).getFileName();
                 String currentPath=currentDir+currentName;
                 FileNameExtensionFilter ff= (FileNameExtensionFilter) e.getNewValue();
-                File file=new File(currentName.substring(0,currentName.lastIndexOf("."))+"."+ff.getExtensions()[0]);
-                fileChooser.setSelectedFile(file);
+                if (!currentName.contains("."))
+                 currentName=currentName+"."+ff.getExtensions()[0];
+                else {
+                    currentName=currentName.substring(0,currentName.lastIndexOf("."))+"."+ff.getExtensions()[0];}
+                fileChooser.setSelectedFile(new File(currentDir+"\\"+currentName));
             }
         });
         // Определение режима - только файл
          fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int result = fileChooser.showSaveDialog(this);
+         int result = fileChooser.showSaveDialog(this);
         FileNameExtensionFilter ff= (FileNameExtensionFilter) fileChooser.getFileFilter();
         file=fileChooser.getSelectedFile();
-        if (!file.getName().contains("."))
-        file=new File(file.getPath()+"."+ff.getExtensions()[0]);
+        System.out.println("Выбран файл "+file);
+      /*  if (!file.getName().contains("."))
+            file=new File(file.getPath()+"."+ff.getExtensions()[0]);
         else {
-            file=new File(file.getPath().substring(0,file.getPath().lastIndexOf("."))+"."+ff.getExtensions()[0]);
-        }
+            file=new File(file.getPath().substring(0,file.getPath().lastIndexOf("."))+"."+ff.getExtensions()[0]);}
         fileChooser.setSelectedFile(file);
-        if (result == JFileChooser.APPROVE_OPTION )
-            JOptionPane.showMessageDialog(fileChooser,
-                    "Файл " + fileChooser.getSelectedFile() +
-                            " сохранен");
+       */ System.out.println("Установлен файл "+file);
+        if (result == JFileChooser.APPROVE_OPTION ) {
+            ff=(FileNameExtensionFilter) fileChooser.getFileFilter();
+            if (!file.getName().contains("."))
+                file=new File(file.getPath()+"."+ff.getExtensions()[0]);
+            else {
+                file=new File(file.getPath().substring(0,file.getPath().lastIndexOf("."))+"."+ff.getExtensions()[0]);}
+            fileChooser.setSelectedFile(file);
+            System.out.println("Установлен файл "+file);
+            System.out.println("Файл существует?-"+file+" "+file.exists());
+
+            while (file.exists()) {
+                int res=JOptionPane.showConfirmDialog(fileChooser, "Файл " + fileChooser.getSelectedFile()+ " уже существует. Перезаписать?", "", JOptionPane.YES_NO_OPTION);
+                if (res==JOptionPane.YES_OPTION) break;
+                if (res==JOptionPane.NO_OPTION){
+                    fileChooser.showSaveDialog(this);
+                    file=fileChooser.getSelectedFile();
+                    System.out.println("Выбран файл "+file);
+                    ff=(FileNameExtensionFilter) fileChooser.getFileFilter();
+                    if (!file.getName().contains("."))
+                        file=new File(file.getPath()+"."+ff.getExtensions()[0]);
+                    else {
+                        file=new File(file.getPath().substring(0,file.getPath().lastIndexOf("."))+"."+ff.getExtensions()[0]);}
+                    fileChooser.setSelectedFile(file);
+                    System.out.println("Установлен файл "+file);
+                    System.out.println("Файл существует?-"+file+" "+file.exists());
+                }
+            }
+        }
         else file=null;
+        System.out.println("Файл из вью "+file);
         return file;
     }
 

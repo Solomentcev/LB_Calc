@@ -81,6 +81,7 @@ public class ProjectPanel extends JPanel{
         panel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLoweredBevelBorder(), "ALSPanel"+(alsPanelList.indexOf(panel)+1)));
         jpanel.add(panel);
+        
         return panel;
     }
 }

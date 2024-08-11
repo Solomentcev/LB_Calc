@@ -1,5 +1,13 @@
 package als;
 
+import view.DrawALS;
+import view.PreviewImageProject;
+
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +60,7 @@ public class ProjectService {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
             objectOutputStream.writeObject(project);
+            System.out.println("Файл "+fileName+" сохранен.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,6 +71,7 @@ public class ProjectService {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
             objectOutputStream.writeObject(project);
+            System.out.println("Файл "+fileName+" сохранен.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -78,12 +88,37 @@ public class ProjectService {
     }
     public void writeProjectToJPG(Project project, String fileName){
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            PreviewImageProject p=new PreviewImageProject(project);
 
-            objectOutputStream.writeObject(project);
+            System.out.println(p.getImagePanel().getWidth());
+            System.out.println(p.getImagePanel().getHeight());
+            BufferedImage im = new BufferedImage(p.getImagePanel().getWidth(), p.getImagePanel().getHeight(), BufferedImage.TYPE_INT_RGB);
+
+            p.getImagePanel().paint(im.getGraphics());
+            System.out.println(fileName);
+            ImageIO.write(im, "jpg", new File(fileName));
+            System.out.println("Файл "+fileName+" сохранен.");
+
         } catch (IOException e) {
             throw new RuntimeException(e);
+
+        }
+    }
+    public void writeProjectToPNG(Project project, String fileName){
+        try {
+            PreviewImageProject p=new PreviewImageProject(project);
+            System.out.println(p.getContentPane().getWidth());
+            System.out.println(p.getContentPane().getHeight());
+            BufferedImage im = new BufferedImage(p.getContentPane().getWidth(), p.getContentPane().getHeight(), BufferedImage.TYPE_INT_RGB);
+
+            p.getContentPane().paint(im.getGraphics());
+            System.out.println(fileName);
+            ImageIO.write(im, "png", new File(fileName));
+            System.out.println("Файл "+fileName+" сохранен.");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+
         }
     }
     public void writeProjectToDOCX(Project project, String fileName){

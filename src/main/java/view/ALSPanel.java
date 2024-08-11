@@ -185,7 +185,7 @@ public class ALSPanel extends JPanel {
             }
         });
         p1.add(lbPanel);
-
+        alsInfoPanel.refreshALSInfo(lb.getParentALS());
         revalidate();
         repaint();
         return lbPanel;

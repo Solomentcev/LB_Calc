@@ -1,5 +1,6 @@
 package als;
 
+import javax.swing.*;
 import java.io.Serializable;
 import java.util.*;
 
@@ -16,7 +17,18 @@ public class ALS implements Serializable {
     private int countCells;
     private LC lc;
     private List<LB> lbList;
-
+    private Map<LB, Integer> uniqueLB;
+    public Map<LB, Integer> getUniqueLB() {
+        uniqueLB.clear();
+        for(LB lb:lbList){
+            if (uniqueLB.containsKey(lb)){
+                Integer i=uniqueLB.get(lb);
+                i=i+1;
+                uniqueLB.put(lb,i);
+            } else uniqueLB.put(lb,1);
+        }
+        return uniqueLB;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,10 +72,15 @@ public class ALS implements Serializable {
         width = width +lc.getWidth();
         lc.setParentALS(this);
         lbList=new ArrayList<>();
+        uniqueLB=new HashMap<>();
         LB lb=new LB(5,this);
         countCells = countCells + lb.getCountCells();
         lbList.add(lb);
+        uniqueLB.put(lb,1);
         System.out.println("СОЗДАНА АКХ:"+getName());
+      for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
+          System.out.println(lb1.getKey().getName()+" - "+lb1.getValue()+" шт.");
+      }
     }
 
     public LB addLb(){
@@ -71,10 +88,20 @@ public class ALS implements Serializable {
         lbList.add(lb);
         countCells = countCells + lb.getCountCells();
         width = width + lb.getWidth();
-        System.out.println("ДОБАВЛЕН в АКХ: "+lb.getName());
         name=getName();
         description=getDescription();
-        System.out.println(name);
+        getUniqueLB();
+        if (uniqueLB.containsKey(lb)){
+            Integer i=uniqueLB.get(lb);
+            i=i+1;
+            uniqueLB.put(lb,i);
+            System.out.println("Добавлен еще один "+lb.getDescription());
+           } else {uniqueLB.put(lb,1);
+            System.out.println("Добавлен уникальный "+lb.getDescription());}
+        System.out.println("ДОБАВЛЕН в АКХ: "+lb.getName());
+        for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
+            System.out.println(lb1.getKey().getDescription()+" - "+lb1.getValue()+" шт.");
+        }
         return lb;
     }
 
@@ -193,12 +220,32 @@ public class ALS implements Serializable {
         getCountCells();
         getName();
         getDescription();
+        getUniqueLB();
         System.out.println("ИЗМЕНЕНЫ размеры АКХ");
     }
 
     public void deleteLB(LB lb) {
-        System.out.printf("УДАЛЕН: "+lb.getName() );
+        getUniqueLB();
+        for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
+            Integer i=lb1.getValue();
+            if (lb.equals(lb1.getKey())){
+                if (lb1.getValue()==1) {
+                    uniqueLB.remove(lb);
+                    break;}
+                else {
+                    i=i-1;
+                    uniqueLB.put(lb,i);
+
+                }
+            }
+
+        }
         lbList.remove(lb);
+
+        System.out.printf("УДАЛЕН: "+lb.getName() );
+        for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
+            System.out.println(lb1.getKey().getName()+" - "+lb1.getValue()+" шт.");
+        }
         updateALS();
     }
 }

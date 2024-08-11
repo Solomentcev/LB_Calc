@@ -1,11 +1,14 @@
 package view;
 
 import als.ALS;
+import als.LB;
 
 import javax.swing.*;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 public class ALSInfoPanel extends JPanel {
     private JLabel nameALS=new JLabel();
@@ -19,6 +22,7 @@ public class ALSInfoPanel extends JPanel {
     private JLabel depthCellALS=new JLabel();
     private JButton addLBButton= new JButton("Добавить МХ");
     private JButton deleteALSButton= new JButton("Удалить");
+    private JPanel infoLbPanel=new JPanel();
 
     public JTextField getHeightALS() {
         return heightALS;
@@ -97,33 +101,52 @@ public class ALSInfoPanel extends JPanel {
 
                 getParent().getParent().revalidate();
                 repaint();
+
             }
         });
+        System.out.println("АУУУ");
+        infoLbPanel.setLayout(new BoxLayout(infoLbPanel, BoxLayout.Y_AXIS));
 
+        infoLbPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        for (Map.Entry<LB,Integer> lb:als.getUniqueLB().entrySet()){
+            JLabel lb1=new JLabel(lb.getKey().getDescription()+" - "+lb.getValue()+" шт.");
+            infoLbPanel.add(lb1);
+            lb1.setAlignmentX(Component.LEFT_ALIGNMENT);
+            System.out.println("!"+lb.getKey().getDescription()+" - "+lb.getValue()+" шт.");
+        }
+        this.add(infoLbPanel);
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
-        layout.setHorizontalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(nameALS)
-                        .addComponent(l1)
-                        .addComponent(l2)
-                        .addComponent(l3)
-                        .addComponent(l4)
-                        .addComponent(l5)
-                        .addComponent(l6)
-                        .addComponent(l7)
-                        .addComponent(l8)
-                        .addComponent(deleteALSButton))
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(addLBButton)
-                        .addComponent(countLB)
-                        .addComponent(numCellsSumALS)
-                        .addComponent(heightALS)
-                        .addComponent(weightALS)
-                        .addComponent(depthALS)
-                        .addComponent(upperFrameALS)
-                        .addComponent(bottomFrameALS)
-                        .addComponent(depthCellALS))
+        layout.setHorizontalGroup(
+                layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(nameALS)
+                                    .addComponent(l1)
+                                    .addComponent(l2)
+                                    .addComponent(l3)
+                                    .addComponent(l4)
+                                    .addComponent(l5)
+                                    .addComponent(l6)
+                                    .addComponent(l7)
+                                    .addComponent(l8)
+                                    .addComponent(deleteALSButton)
+                                )
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(addLBButton)
+                                    .addComponent(countLB)
+                                    .addComponent(numCellsSumALS)
+                                    .addComponent(heightALS)
+                                    .addComponent(weightALS)
+                                    .addComponent(depthALS)
+                                    .addComponent(upperFrameALS)
+                                    .addComponent(bottomFrameALS)
+                                    .addComponent(depthCellALS)
+                                )
+                        )
+                        .addComponent(infoLbPanel)
+                )
         );
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -154,7 +177,10 @@ public class ALSInfoPanel extends JPanel {
                         .addComponent(l8)
                         .addComponent(depthCellALS))
                 .addComponent(deleteALSButton)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(infoLbPanel))
         );
+
     }
     public void refreshALSInfo(ALS als){
         nameALS.setText(als.getName());
@@ -166,7 +192,17 @@ public class ALSInfoPanel extends JPanel {
         upperFrameALS.setText(String.valueOf(als.getUpperFrame()));
         bottomFrameALS.setText(String.valueOf(als.getBottomFrame()));
         depthCellALS.setText(String.valueOf(als.getDepthCell()));
+        infoLbPanel.removeAll();
+        infoLbPanel.setLayout(new BoxLayout(infoLbPanel, BoxLayout.Y_AXIS));
 
+        for (Map.Entry<LB,Integer> lb:als.getUniqueLB().entrySet()){
+            JLabel lb1=new JLabel(lb.getKey().getDescription()+" - "+lb.getValue()+" шт.");
+            lb1.setAlignmentX(Component.LEFT_ALIGNMENT);
+            infoLbPanel.add(lb1);
+            System.out.println("!обновление"+lb.getKey().getDescription()+" - "+lb.getValue()+" шт.");
+        }
+        revalidate();
+        repaint();
         System.out.println("ОБНОВЛЕНА [панель инфо АКХ]: "+als.getName());
         System.out.println("-----------");
     }
