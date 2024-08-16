@@ -1,8 +1,10 @@
 package als;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.Serializable;
 import java.util.*;
+import java.util.List;
 
 public class ALS implements Serializable {
     private Project parentProject;
@@ -16,6 +18,10 @@ public class ALS implements Serializable {
     private int depthCell;
     private int countCells;
     private LC lc;
+    private int positionLC;
+    private Color colorDoor;
+    private  Color colorBody;
+
     private List<LB> lbList;
     private Map<LB, Integer> uniqueLB;
     public Map<LB, Integer> getUniqueLB() {

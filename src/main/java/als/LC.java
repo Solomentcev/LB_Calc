@@ -10,6 +10,11 @@ public class LC implements Serializable {
     private int height;
     private int width;
     private int depth;
+    private DisplayLC display;
+    private BarReader barReader;
+    private Payment payment;
+    private boolean printer;
+    private boolean rfidReader;
 
     @Override
     public boolean equals(Object o) {
