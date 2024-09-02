@@ -39,9 +39,14 @@ public class LC implements Serializable {
     public LC(int height, int depth) {
         this.height=height;
         this.depth=depth;
-        width = 300;
         name = getName();
         description=getDescription();
+        width=300;
+        display=(DisplayLC.LC10);
+        barReader=BarReader.NONE;
+        payment=Payment.NONE;
+        printer=false;
+        rfidReader=false;
         System.out.println("СОЗДАН: " + name);
     }
 
@@ -106,6 +111,66 @@ public class LC implements Serializable {
         description=getDescription();
         parentALS.updateALS();
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public DisplayLC getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(DisplayLC display) throws DimensionException {
+        this.display = display;
+        switch (display){
+            case NONE, LC10 -> {
+                setWidth(300);
+                break;
+            }
+            case LC17 -> {
+                setWidth(450);
+                break;
+            }
+            case LC19 -> {
+                setWidth(500);
+                break;
+            }
+        }
+    }
+
+    public BarReader getBarReader() {
+        return barReader;
+    }
+
+    public void setBarReader(BarReader barReader) {
+        this.barReader = barReader;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+
+    }
+
+    public boolean isPrinter() {
+        return printer;
+    }
+
+    public void setPrinter(boolean printer) {
+        this.printer = printer;
+    }
+
+    public boolean isRfidReader() {
+        return rfidReader;
+    }
+
+    public void setRfidReader(boolean rfidReader) {
+        this.rfidReader = rfidReader;
+    }
+
     public Map<String,String> getInfoLC(){
         Map<String, String> LCInfo=new HashMap<>();
         LCInfo.put("name",name);

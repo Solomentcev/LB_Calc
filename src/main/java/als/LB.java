@@ -20,6 +20,7 @@ public class LB implements Serializable {
     private double heightCell;
     private int widthCell;
     private int depthCell;
+    private OpenDoorDirection openDoorDirection;
     public LB(int countCells, int height, int depth, int upperFrame, int bottomFrame){
         this.height=height;
         this.depth=depth;
@@ -36,7 +37,7 @@ public class LB implements Serializable {
         System.out.println("Создан: "+name);
         // System.out.println("Габариты ячеек,ВхШхГ,мм: "+heightCell+"x"+weightCell+"x"+depthCell+".");
     }
-    public LB(int numCells,ALS als) {
+    public LB(int numCells,ALS als, OpenDoorDirection openDoorDirection) {
         setParentALS(als);
         this.countCells = numCells;
         height=als.getHeight();
@@ -52,6 +53,7 @@ public class LB implements Serializable {
         heightCell = (height - upperFrame - bottomFrame - ((numCells - 1) * shelfThick)) / numCells;
         name=getName();
         description=getDescription();
+        this.openDoorDirection=openDoorDirection;
         System.out.println("Создан: "+name);
     }
     @Override
@@ -213,6 +215,15 @@ public class LB implements Serializable {
     public TypeLb getType() {
         return type;
     }
+
+    public OpenDoorDirection getOpenDoorDirection() {
+        return openDoorDirection;
+    }
+
+    public void setOpenDoorDirection(OpenDoorDirection openDoorDirection) {
+        this.openDoorDirection = openDoorDirection;
+    }
+
     public Map<String,String> getInfoLB(){
         Map<String,String> LBinfo=new HashMap();
         LBinfo.put("name", name);

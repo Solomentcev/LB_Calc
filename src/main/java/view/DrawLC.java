@@ -10,6 +10,8 @@ public class DrawLC extends JPanel {
     private int height;
     private int width;
     private int depth;
+    private int displayWidth;
+    private int displayHeight;
     private int upperFrame;
     private int bottomFrame;
     public DrawLC(LC lc){
@@ -17,23 +19,29 @@ public class DrawLC extends JPanel {
         height=lc.getHeight();
         bottomFrame=lc.getParentALS().getBottomFrame();
         upperFrame=lc.getParentALS().getUpperFrame();
-
+        displayHeight=lc.getDisplay().getDisplayHeight();
+        displayWidth=lc.getDisplay().getDisplayWidth();
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         g.setColor(Color.BLACK);
-        g.drawRoundRect(0,0, width/10,height/10, 1,1);//габариты модуля
-        g.drawRoundRect(0,0, width/10,upperFrame/10, 1,1); //верхняя рама
-        g.drawRoundRect(0,(height-bottomFrame)/10, width/10,bottomFrame/10, 1,1);//нижняя рама
-        g.drawRoundRect(((width-255)/2)/10,(625)/10, 255/10,175/10, 1,1);//дисплей
-        g.drawRoundRect(0,upperFrame/10, width/10,(height-1100)/10, 1,1);//панель
+        drawLC(g,0);
+    }
+    public void drawLC(Graphics g, int x){
+        g.drawRoundRect(x,0, width/10,height/10, 1,1);//габариты модуля
+        g.drawRoundRect(x,0, width/10,upperFrame/10, 1,1); //верхняя рама
+        g.drawRoundRect(x,(height-bottomFrame)/10, width/10,bottomFrame/10, 1,1);//нижняя рама
+        g.drawRoundRect(((width-displayWidth)/2)/10,(625)/10, displayWidth/10,displayHeight/10, 1,1);//дисплей
+        g.drawRoundRect(x,upperFrame/10, width/10,(height-1100)/10, 1,1);//панель
     }
     public void refreshDrawLC(LC lc){
         width =lc.getWidth();
         height=lc.getHeight();
         bottomFrame=lc.getParentALS().getBottomFrame();
         upperFrame=lc.getParentALS().getUpperFrame();
+        displayHeight=lc.getDisplay().getDisplayHeight();
+        displayWidth=lc.getDisplay().getDisplayWidth();
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
         revalidate();
         repaint();

@@ -2,7 +2,7 @@ package als;
 
 public enum DisplayLC {
     NONE(0,0,300),
-    LC10(155,174,300),
+    LC10(255,174,300),
     LC17(338,270,450),
     LC19(376,301,500);
     private int displayWidth;

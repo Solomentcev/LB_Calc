@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class LBPanel extends JPanel{
     private JLabel nameLB=new JLabel();
-    private JButton deleteLBButton = new JButton("Удалить");
+    private final JButton deleteLBButton = new JButton("Удалить");
     private JComboBox<String> typeLb= new JComboBox<>();
     private JLabel heightLB=new JLabel();
     private JTextField widthLB =new JTextField(5);
@@ -52,7 +52,7 @@ public class LBPanel extends JPanel{
        // this.add(this.heightLB);
 
         JLabel l2=new JLabel("Ширина, мм: ");
-        this.add(l2);
+      //  this.add(l2);
         this.widthLB.setText(String.valueOf(lb.getWidth()));
         this.add(this.widthLB);
 

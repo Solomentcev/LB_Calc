@@ -1,7 +1,6 @@
 package view;
 
-import als.DimensionException;
-import als.LC;
+import als.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,6 +16,12 @@ public class LCPanel extends JPanel {
     private JLabel heightLC;
     private JTextField widthLC;
     private JLabel depthLC;
+    private JComboBox<String> display= new JComboBox<>();
+    private JComboBox<String> barReader= new JComboBox<>();
+    private JComboBox<String> payment= new JComboBox<>();
+    private JCheckBox printer= new JCheckBox();
+    private JCheckBox rfidReader= new JCheckBox();
+    private JComboBox<String> positionLC= new JComboBox<>();
     private JPanel imageLCPanel;
     private DrawLC drawLC;
 
@@ -60,6 +65,44 @@ public class LCPanel extends JPanel {
         this.add(l3);
         this.depthLC.setText(String.valueOf(lc.getDepth()));
         this.add(this.depthLC);
+        JLabel l4=new JLabel("Дисплей: ");
+        this.add(l4);
+        DisplayLC[] displays=DisplayLC.values();
+        for(DisplayLC displayLC:displays){
+            display.addItem(String.valueOf(displayLC));
+        }
+        display.setSelectedItem(String.valueOf(lc.getDisplay()));
+        JLabel l5=new JLabel("Считыватель: ");
+        this.add(l5);
+        BarReader[] barReaders=BarReader.values();
+        for (BarReader barReader1:barReaders){
+            barReader.addItem(String.valueOf(barReader1));
+        }
+        barReader.setSelectedItem(String.valueOf(lc.getBarReader()));
+
+        JLabel l6=new JLabel("Сканер: ");
+        this.add(l6);
+        rfidReader.setSelected(lc.isRfidReader());
+
+        JLabel l7=new JLabel("Принтер: ");
+        this.add(l7);
+        printer.setSelected(lc.isPrinter());
+
+        JLabel l8=new JLabel("Оплата: ");
+        this.add(l8);
+        Payment[] payments=Payment.values();
+        for (Payment payment1:payments){
+            payment.addItem(String.valueOf(payment1));
+        }
+        payment.setSelectedItem(String.valueOf(lc.getPayment()));
+
+        JLabel l9=new JLabel("Расположение МУ: ");
+        this.add(l9);
+        PositionLC[] positionLC1=PositionLC.values();
+        for (PositionLC positionLC2:positionLC1){
+            positionLC.addItem(String.valueOf(positionLC2));
+        }
+        positionLC.setSelectedItem((String.valueOf(lc.getParentALS().getPositionLC())));
 
         this.add(imageLCPanel);
         imageLCPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
@@ -77,11 +120,24 @@ public class LCPanel extends JPanel {
                                 .addComponent(l1)
                                 .addComponent(l2)
                                 .addComponent(l3)
-                            )
+                                .addComponent(l4)
+                                .addComponent(l5)
+                                .addComponent(l6)
+                                .addComponent(l7)
+                                .addComponent(l8)
+                                .addComponent(l9)
+                        )
                             .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(heightLC)
                                 .addComponent(widthLC)
                                 .addComponent(depthLC)
+                                .addComponent(display)
+                                .addComponent(rfidReader)
+                                .addComponent(barReader)
+                                .addComponent(printer)
+                                .addComponent(payment)
+                                .addComponent(positionLC)
+
                             )
                         )
                         .addComponent(imageLCPanel)
@@ -98,6 +154,29 @@ public class LCPanel extends JPanel {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(l3)
                         .addComponent(depthLC))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(l4)
+                        .addComponent(display))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(l5)
+                        .addComponent(rfidReader))
+
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(l6)
+                        .addComponent(barReader))
+
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(l7)
+                        .addComponent(printer))
+
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(l8)
+                        .addComponent(payment))
+
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(l9)
+                        .addComponent(positionLC)
+                        )
                 .addComponent(imageLCPanel)
         );
 
