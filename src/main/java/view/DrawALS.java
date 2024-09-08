@@ -25,7 +25,7 @@ public class DrawALS extends JPanel {
         this.upperFrame = als.getUpperFrame();
         this.bottomFrame = als.getBottomFrame();
         this.lc =als.getLc();
-        positionLC=als.getPositionLC();
+        this.positionLC=als.getPositionLC();
         this.lbList = als.getLbList();
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
     }
@@ -35,25 +35,31 @@ public class DrawALS extends JPanel {
         super.paintComponent(g);
         g.setColor(Color.BLACK);
         int x=0;
-        if (positionLC==PositionLC.LEFT) {
+        System.out.println(positionLC);
+        if (this.positionLC.equals(PositionLC.LEFT)) {
             drawLC(g,x);
             x=x+lc.getWidth()/10;
+            System.out.println("слева");
         }
         for (int i = 0; i < lbList.size(); i++) {
             LB lb = lbList.get(i);
-            if (positionLC == PositionLC.CENTER && i==lbList.size()/2) {
+            if ((positionLC.equals(PositionLC.CENTER)) && (i==lbList.size()/2)) {
                 drawLC(g,x);
+                System.out.println("центр");
                 x=x+lc.getWidth()/10;
                 drawLB(g,x,lb);
                 x = x + lb.getWidth() / 10;
+
             } else {
                 drawLB(g,x,lb);
+                System.out.println("не центр");
                 x = x + lb.getWidth() / 10;
             }
         }
-        if (positionLC==PositionLC.RIGHT) {
+        if (positionLC.equals(PositionLC.RIGHT)) {
             drawLC(g,x);
             x=x+lc.getWidth()/10;
+            System.out.println("справа");
         }
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
     }
@@ -61,7 +67,7 @@ public class DrawALS extends JPanel {
         g.drawRoundRect(x,0, lc.getWidth()/10,lc.getHeight()/10, 1,1);//габариты модуля
         g.drawRoundRect(x,0, lc.getWidth()/10,upperFrame/10, 1,1); //верхняя рама
         g.drawRoundRect(x,(lc.getHeight()-bottomFrame)/10, lc.getWidth()/10,bottomFrame/10, 1,1);//нижняя рама
-        g.drawRoundRect(x+((lc.getWidth()-lc.getDisplay().getDisplayWidth())/2)/10,(625)/10,
+        g.drawRoundRect(x+((lc.getWidth()-lc.getDisplay().getDisplayWidth())/2)/10,(lc.getHeight()-1300-lc.getDisplay().getDisplayHeight())/10,
                 lc.getDisplay().getDisplayWidth() /10,lc.getDisplay().getDisplayHeight()/10, 1,1);//дисплей
         g.drawRoundRect(x,upperFrame/10, lc.getWidth()/10,(lc.getHeight()-1100)/10, 1,1);//панель
     }
@@ -94,6 +100,7 @@ public class DrawALS extends JPanel {
         this.bottomFrame = als.getBottomFrame();
         this.lc =als.getLc();
         this.lbList = als.getLbList();
+        this.positionLC=als.getPositionLC();
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
         revalidate();
         repaint();

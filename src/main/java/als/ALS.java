@@ -82,8 +82,8 @@ public class ALS implements Serializable {
         uniqueLB=new HashMap<>();
         positionLC=PositionLC.CENTER;
        OpenDoorDirection openDoorDirection = null;
-      if (positionLC == PositionLC.LEFT || positionLC == PositionLC.CENTER) openDoorDirection=OpenDoorDirection.RIGHT;
-      else if (positionLC == PositionLC.RIGHT) openDoorDirection=OpenDoorDirection.LEFT;
+       if (positionLC == PositionLC.LEFT || positionLC == PositionLC.CENTER) openDoorDirection=OpenDoorDirection.RIGHT;
+          else if (positionLC == PositionLC.RIGHT) openDoorDirection=OpenDoorDirection.LEFT;
         LB lb=new LB(5,this, openDoorDirection);
         countCells = countCells + lb.getCountCells();
         lbList.add(lb);
@@ -285,6 +285,7 @@ public class ALS implements Serializable {
             } else if ((positionLC==PositionLC.CENTER && i<lbList.size()/2) || positionLC==PositionLC.RIGHT)
                 lbList.get(i).setOpenDoorDirection(OpenDoorDirection.LEFT);
         }
+        System.out.println("Расположение МУ: "+positionLC);
     }
 
     public Color getColorDoor() {

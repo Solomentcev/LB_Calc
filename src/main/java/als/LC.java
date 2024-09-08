@@ -125,17 +125,16 @@ public class LC implements Serializable {
         switch (display){
             case NONE, LC10 -> {
                 setWidth(300);
-                break;
             }
             case LC17 -> {
                 setWidth(450);
-                break;
             }
             case LC19 -> {
                 setWidth(500);
-                break;
             }
         }
+        System.out.println("Дисплей: "+display);
+
     }
 
     public BarReader getBarReader() {
@@ -144,6 +143,7 @@ public class LC implements Serializable {
 
     public void setBarReader(BarReader barReader) {
         this.barReader = barReader;
+        System.out.println("Сканер:"+barReader);
     }
 
     public Payment getPayment() {
@@ -152,6 +152,7 @@ public class LC implements Serializable {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+        System.out.println("Оплата: "+payment);
 
     }
 
@@ -161,6 +162,7 @@ public class LC implements Serializable {
 
     public void setPrinter(boolean printer) {
         this.printer = printer;
+        System.out.println("Принтер: "+printer);
     }
 
     public boolean isRfidReader() {
@@ -169,6 +171,7 @@ public class LC implements Serializable {
 
     public void setRfidReader(boolean rfidReader) {
         this.rfidReader = rfidReader;
+        System.out.println("Cчитыватель: "+ rfidReader);
     }
 
     public Map<String,String> getInfoLC(){

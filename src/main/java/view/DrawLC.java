@@ -32,7 +32,7 @@ public class DrawLC extends JPanel {
         g.drawRoundRect(x,0, width/10,height/10, 1,1);//габариты модуля
         g.drawRoundRect(x,0, width/10,upperFrame/10, 1,1); //верхняя рама
         g.drawRoundRect(x,(height-bottomFrame)/10, width/10,bottomFrame/10, 1,1);//нижняя рама
-        g.drawRoundRect(((width-displayWidth)/2)/10,(625)/10, displayWidth/10,displayHeight/10, 1,1);//дисплей
+        g.drawRoundRect(((width-displayWidth)/2)/10,(height-1300-displayHeight)/10, displayWidth/10,displayHeight/10, 1,1);//дисплей
         g.drawRoundRect(x,upperFrame/10, width/10,(height-1100)/10, 1,1);//панель
     }
     public void refreshDrawLC(LC lc){

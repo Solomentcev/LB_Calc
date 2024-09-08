@@ -55,7 +55,7 @@ public class LCPanel extends JPanel {
                     System.out.println(ex.getMessage());
                 }
                 refreshLCPanel(lc);
-                ALSPanel alsPanel= (ALSPanel) getParent();
+                ALSPanel alsPanel= (ALSPanel) getParent().getParent();
                 alsPanel.refreshALSPanel(lc.getParentALS());
                 getParent().repaint();
             }
@@ -72,6 +72,21 @@ public class LCPanel extends JPanel {
             display.addItem(String.valueOf(displayLC));
         }
         display.setSelectedItem(String.valueOf(lc.getDisplay()));
+        display.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    lc.setDisplay(DisplayLC.valueOf(String.valueOf(display.getSelectedItem())));
+                } catch (DimensionException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                refreshLCPanel(lc);
+                ALSPanel alsPanel= (ALSPanel) getParent().getParent();
+                alsPanel.refreshALSPanel(lc.getParentALS());
+                getParent().repaint();
+            }
+        });
+
         JLabel l5=new JLabel("Считыватель: ");
         this.add(l5);
         BarReader[] barReaders=BarReader.values();
@@ -79,15 +94,43 @@ public class LCPanel extends JPanel {
             barReader.addItem(String.valueOf(barReader1));
         }
         barReader.setSelectedItem(String.valueOf(lc.getBarReader()));
-
+        barReader.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                lc.setBarReader(BarReader.valueOf(String.valueOf(barReader.getSelectedItem())));
+                refreshLCPanel(lc);
+                ALSPanel alsPanel= (ALSPanel) getParent().getParent();
+                alsPanel.refreshALSPanel(lc.getParentALS());
+                getParent().repaint();
+            }
+        });
         JLabel l6=new JLabel("Сканер: ");
         this.add(l6);
         rfidReader.setSelected(lc.isRfidReader());
+        rfidReader.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                lc.setRfidReader(rfidReader.isSelected());
+                refreshLCPanel(lc);
+                ALSPanel alsPanel= (ALSPanel) getParent().getParent();
+                alsPanel.refreshALSPanel(lc.getParentALS());
+                getParent().repaint();
+            }
+        });
 
         JLabel l7=new JLabel("Принтер: ");
         this.add(l7);
         printer.setSelected(lc.isPrinter());
-
+        printer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                lc.setPrinter(printer.isSelected());
+                refreshLCPanel(lc);
+                ALSPanel alsPanel= (ALSPanel) getParent().getParent();
+                alsPanel.refreshALSPanel(lc.getParentALS());
+                getParent().repaint();
+            }
+        });
         JLabel l8=new JLabel("Оплата: ");
         this.add(l8);
         Payment[] payments=Payment.values();
@@ -95,7 +138,16 @@ public class LCPanel extends JPanel {
             payment.addItem(String.valueOf(payment1));
         }
         payment.setSelectedItem(String.valueOf(lc.getPayment()));
-
+        payment.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                lc.setPayment(Payment.valueOf(String.valueOf(payment.getSelectedItem())));
+                refreshLCPanel(lc);
+                ALSPanel alsPanel= (ALSPanel) getParent().getParent();
+                alsPanel.refreshALSPanel(lc.getParentALS());
+                getParent().repaint();
+            }
+        });
         JLabel l9=new JLabel("Расположение МУ: ");
         this.add(l9);
         PositionLC[] positionLC1=PositionLC.values();
@@ -103,6 +155,16 @@ public class LCPanel extends JPanel {
             positionLC.addItem(String.valueOf(positionLC2));
         }
         positionLC.setSelectedItem((String.valueOf(lc.getParentALS().getPositionLC())));
+        positionLC.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                lc.getParentALS().setPositionLC(PositionLC.valueOf(String.valueOf(positionLC.getSelectedItem())));
+                refreshLCPanel(lc);
+                ALSPanel alsPanel= (ALSPanel) getParent().getParent();
+                alsPanel.refreshALSPanel(lc.getParentALS());
+                getParent().repaint();
+            }
+        });
 
         this.add(imageLCPanel);
         imageLCPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
