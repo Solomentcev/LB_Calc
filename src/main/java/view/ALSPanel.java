@@ -1,9 +1,6 @@
 package view;
 
-import als.ALS;
-import als.DimensionException;
-import als.LB;
-import als.TypeLb;
+import als.*;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -78,6 +75,28 @@ public class ALSPanel extends JPanel {
                 } catch (NumberFormatException ex) {
                     System.out.println("Введите целое число");
                 }
+                alsInfoPanel.refreshALSInfo(als);
+                refreshALSPanel(als);
+                imageALSPanel.refreshDrawAls(als);
+                revalidate();
+                repaint();
+            }
+        });
+        alsInfoPanel.getColorDoor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                als.setColorDoor(Colors.valueOf(String.valueOf(alsInfoPanel.getColorDoor().getSelectedItem())));
+                alsInfoPanel.refreshALSInfo(als);
+                refreshALSPanel(als);
+                imageALSPanel.refreshDrawAls(als);
+                revalidate();
+                repaint();
+            }
+        });
+        alsInfoPanel.getColorBody().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                als.setColorBody(Colors.valueOf(String.valueOf(alsInfoPanel.getColorBody().getSelectedItem())));
                 alsInfoPanel.refreshALSInfo(als);
                 refreshALSPanel(als);
                 imageALSPanel.refreshDrawAls(als);

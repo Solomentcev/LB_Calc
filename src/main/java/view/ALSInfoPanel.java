@@ -1,6 +1,7 @@
 package view;
 
 import als.ALS;
+import als.Colors;
 import als.LB;
 
 import javax.swing.*;
@@ -20,6 +21,8 @@ public class ALSInfoPanel extends JPanel {
     private JLabel upperFrameALS=new JLabel();
     private JLabel bottomFrameALS=new JLabel();
     private JLabel depthCellALS=new JLabel();
+    private JComboBox<Colors> colorBody= new JComboBox<>();
+    private JComboBox<Colors> colorDoor= new JComboBox<>();
     private JButton addLBButton= new JButton("Добавить МХ");
     private JButton deleteALSButton= new JButton("Удалить");
     private JPanel infoLbPanel=new JPanel();
@@ -91,6 +94,22 @@ public class ALSInfoPanel extends JPanel {
         this.add(l8);
         this.depthCellALS.setText(String.valueOf(als.getDepthCell()));
         this.add(this.depthCellALS);
+
+        JLabel l9=new JLabel("Цвет корпуса:");
+        this.add(l9);
+        Colors[] colors=Colors.values();
+        for (Colors color:colors){
+            colorBody.addItem(color);
+        }
+        colorBody.setSelectedItem(als.getColorBody());
+
+        JLabel l10=new JLabel("Цвет дверей:");
+        this.add(l10);
+        for (Colors color:colors){
+            colorDoor.addItem(color);
+        }
+        colorDoor.setSelectedItem(als.getColorDoor());
+
         this.add(deleteALSButton);
         deleteALSButton.addActionListener(new ActionListener() {
             @Override
@@ -131,6 +150,8 @@ public class ALSInfoPanel extends JPanel {
                                     .addComponent(l6)
                                     .addComponent(l7)
                                     .addComponent(l8)
+                                    .addComponent(l9)
+                                    .addComponent(l10)
                                     .addComponent(deleteALSButton)
                                 )
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -143,6 +164,8 @@ public class ALSInfoPanel extends JPanel {
                                     .addComponent(upperFrameALS)
                                     .addComponent(bottomFrameALS)
                                     .addComponent(depthCellALS)
+                                    .addComponent(colorBody)
+                                    .addComponent(colorDoor)
                                 )
                         )
                         .addComponent(infoLbPanel)
@@ -176,12 +199,29 @@ public class ALSInfoPanel extends JPanel {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(l8)
                         .addComponent(depthCellALS))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(l9)
+                        .addComponent(colorBody)
+                        )
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(l10)
+                        .addComponent(colorDoor)
+                        )
                 .addComponent(deleteALSButton)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(infoLbPanel))
         );
 
     }
+
+    public JComboBox<Colors> getColorBody() {
+        return colorBody;
+    }
+
+    public JComboBox<Colors> getColorDoor() {
+        return colorDoor;
+    }
+
     public void refreshALSInfo(ALS als){
         nameALS.setText(als.getName());
         countLB.setText(String.valueOf(als.getLbList().size()));
@@ -192,6 +232,8 @@ public class ALSInfoPanel extends JPanel {
         upperFrameALS.setText(String.valueOf(als.getUpperFrame()));
         bottomFrameALS.setText(String.valueOf(als.getBottomFrame()));
         depthCellALS.setText(String.valueOf(als.getDepthCell()));
+        colorBody.setSelectedItem(als.getColorBody());
+        colorDoor.setSelectedItem(als.getColorDoor());
         infoLbPanel.removeAll();
         infoLbPanel.setLayout(new BoxLayout(infoLbPanel, BoxLayout.Y_AXIS));
 

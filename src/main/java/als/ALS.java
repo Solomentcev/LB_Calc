@@ -1,7 +1,5 @@
 package als;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.Serializable;
 import java.util.*;
 import java.util.List;
@@ -19,8 +17,8 @@ public class ALS implements Serializable {
     private int countCells;
     private LC lc;
     private PositionLC positionLC;
-    private Color colorDoor;
-    private Color colorBody;
+    private Colors colorDoor;
+    private Colors colorBody;
 
     private List<LB> lbList;
     private Map<LB, Integer> uniqueLB;
@@ -75,7 +73,8 @@ public class ALS implements Serializable {
         bottomFrame=50;
         depthCell=depth-20;
         lc=new LC(height,depth);
-
+        colorBody=Colors.BLUE;
+        colorDoor=Colors.White;
         width = width +lc.getWidth();
         lc.setParentALS(this);
         lbList=new ArrayList<>();
@@ -288,19 +287,19 @@ public class ALS implements Serializable {
         System.out.println("Расположение МУ: "+positionLC);
     }
 
-    public Color getColorDoor() {
+    public Colors getColorDoor() {
         return colorDoor;
     }
 
-    public void setColorDoor(Color colorDoor) {
+    public void setColorDoor(Colors colorDoor) {
         this.colorDoor = colorDoor;
     }
 
-    public Color getColorBody() {
+    public Colors getColorBody() {
         return colorBody;
     }
 
-    public void setColorBody(Color colorBody) {
+    public void setColorBody(Colors colorBody) {
         this.colorBody = colorBody;
     }
 }
