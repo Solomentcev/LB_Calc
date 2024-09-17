@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectPanel extends JPanel{
-    private JPanel panel;
-    private JLabel projectName;
-    private JTextField companyLabel;
-    private JButton addALSButton;
+    private final JPanel panel;
+    private final JLabel projectName;
+    private final JTextField companyLabel;
+    private final JButton addALSButton;
 
-    private JPanel jpanel;
+    private final JPanel jpanel;
     private ALSPanel alsPanel;
-    private List<ALSPanel> alsPanelList;
+    private final List<ALSPanel> alsPanelList;
 
     public ProjectPanel(Project project) {
         projectName=new JLabel("Заказчик:");

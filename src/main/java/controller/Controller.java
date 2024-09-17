@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Controller {
-    private View view;
-    private ProjectService projectService=new ProjectService();
-    private Map<ProjectPanel,Project> projectMap =new HashMap<>();
+    private final View view;
+    private final ProjectService projectService=new ProjectService();
+    private final Map<ProjectPanel,Project> projectMap =new HashMap<>();
     public Map<ProjectPanel,Project> getProjectMap() {
         return projectMap;
     }

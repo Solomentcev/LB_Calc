@@ -13,16 +13,16 @@ import java.util.List;
 import static java.awt.Component.*;
 
 public class ALSPanel extends JPanel {
-    private ALSInfoPanel alsInfoPanel;
-    private LCPanel lcpanel;
-    private DrawALS imageALSPanel;
+    private final ALSInfoPanel alsInfoPanel;
+    private final LCPanel lcpanel;
+    private final DrawALS imageALSPanel;
 
     public List<LBPanel> getLBPanelList() {
         return LBPanelList;
     }
     JPanel p1=new JPanel();
     JPanel p2=new JPanel();
-    private List<LBPanel> LBPanelList;
+    private final List<LBPanel> LBPanelList;
    // private LBPanel lbPanel;
 
     public ALSPanel(ALS als) {

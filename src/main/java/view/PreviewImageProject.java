@@ -29,7 +29,7 @@ public class PreviewImageProject extends JFrame  {
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 
         for (ALS als:project.getAlsList()){
-            JTextArea description=new JTextArea(als.getDescription());
+            JLabel description=new JLabel(als.getDescription());
             imagePanel.add(description);
 
             DrawALS a=new DrawALS(als);

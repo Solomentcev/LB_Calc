@@ -5,8 +5,8 @@ public enum DisplayLC {
     LC10(255,174,300),
     LC17(338,270,450),
     LC19(376,301,500);
-    private int displayWidth;
-    private int displayHeight;
+    private final int displayWidth;
+    private final int displayHeight;
     private int width;
     DisplayLC(int displayWidth, int displayHeight,int width){
             this.displayWidth=displayWidth;

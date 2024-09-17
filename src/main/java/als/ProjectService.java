@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectService {
-    private  Map<Integer,Project> projects;
+    private final Map<Integer,Project> projects;
 
     public ProjectService() {
          projects=new HashMap<>();

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class View extends JFrame implements ActionListener {
     private Controller controller;
-    private ProjectTabPanel projectTabPanel =new ProjectTabPanel();
+    private final ProjectTabPanel projectTabPanel =new ProjectTabPanel();
 
     public View() {
         try {
@@ -71,17 +71,7 @@ public class View extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(this, "Проекты АКХ", "О программе", JOptionPane.INFORMATION_MESSAGE);
     }
     public ProjectPanel initProject(Project project){
-       // ProjectPanel projectPanel=new ProjectPanel(project);
         projectTabPanel.addProjectPanel(project);
-
-      //  ButtonTabComponent btnClose=new ButtonTabComponent(projectTabbedPane);
-     //   projectTabbedPane.addTab(project.getName(), projectPanel);
-
-
-     //   projectTabbedPane.setSelectedIndex(projectTabbedPane.getTabCount()-1);
-      //  projectTabbedPane.setTabComponentAt(projectTabbedPane.getTabCount()-1,btnClose);
-
-      //  getContentPane().add(projectTabbedPane,BorderLayout.CENTER);
         getContentPane().add(projectTabPanel,BorderLayout.CENTER);
         setMinimumSize(new Dimension(500,200));
         pack();
@@ -121,10 +111,10 @@ public class View extends JFrame implements ActionListener {
 
         }
         fileChooser.setAcceptAllFileFilterUsed(false);
-        // Определение режима - только файл
+
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int result = fileChooser.showOpenDialog(this);
-        // Если файл выбран, покажем его в сообщении
+
         if (result == JFileChooser.APPROVE_OPTION )
             JOptionPane.showMessageDialog(this,
                     "Выбран файл  " +

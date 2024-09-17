@@ -21,51 +21,8 @@ public class ALS implements Serializable {
     private Colors colorBody;
 
     private List<LB> lbList;
-    private Map<LB, Integer> uniqueLB;
-    public Map<LB, Integer> getUniqueLB() {
-        uniqueLB.clear();
-        for(LB lb:lbList){
-            if (uniqueLB.containsKey(lb)){
-                Integer i=uniqueLB.get(lb);
-                i=i+1;
-                uniqueLB.put(lb,i);
-            } else uniqueLB.put(lb,1);
-        }
-        return uniqueLB;
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ALS)) return false;
-        ALS als = (ALS) o;
-        return getHeight() == als.getHeight() && getDepth() == als.getDepth() && getWidth() == als.getWidth() && getUpperFrame() == als.getUpperFrame() && getBottomFrame() == als.getBottomFrame() && getDepthCell() == als.getDepthCell() && getCountCells() == als.getCountCells()  && Objects.equals(getLc(), als.getLc()) && (getLbList().size()==als.getLbList().size());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getParentProject(), getName(), getHeight(), getDepth(), getWidth(), getUpperFrame(), getBottomFrame(), getDepthCell(), getCountCells(), getLc(), getLbList());
-    }
-
-    public int getDepthCell() {
-        return depthCell;
-    }
-
-    public void setDepthCell(int depthCell) {
-        this.depthCell = depthCell;
-    }
-
-    public void setCountCells(int countCells) {
-        this.countCells = countCells;
-    }
-
-    public void setLc(LC lc) {
-        this.lc = lc;
-    }
-
-    public LC getLc() {
-        return lc;
-    }
-  public ALS(Project project){
+    private final Map<LB, Integer> uniqueLB;
+    public ALS(Project project){
         parentProject=project;
         height=1940;
         depth=500;
@@ -80,17 +37,17 @@ public class ALS implements Serializable {
         lbList=new ArrayList<>();
         uniqueLB=new HashMap<>();
         positionLC=PositionLC.CENTER;
-       OpenDoorDirection openDoorDirection = null;
-       if (positionLC == PositionLC.LEFT || positionLC == PositionLC.CENTER) openDoorDirection=OpenDoorDirection.RIGHT;
-          else if (positionLC == PositionLC.RIGHT) openDoorDirection=OpenDoorDirection.LEFT;
+        OpenDoorDirection openDoorDirection = null;
+        if (positionLC == PositionLC.LEFT || positionLC == PositionLC.CENTER) openDoorDirection=OpenDoorDirection.RIGHT;
+        else if (positionLC == PositionLC.RIGHT) openDoorDirection=OpenDoorDirection.LEFT;
         LB lb=new LB(5,this, openDoorDirection);
         countCells = countCells + lb.getCountCells();
         lbList.add(lb);
         uniqueLB.put(lb,1);
         System.out.println("СОЗДАНА АКХ:"+getName());
-      for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
-          System.out.println(lb1.getKey().getName()+" - "+lb1.getValue()+" шт.");
-      }
+        for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
+            System.out.println(lb1.getKey().getName()+" - "+lb1.getValue()+" шт.");
+        }
     }
 
     public LB addLb(){
@@ -119,7 +76,7 @@ public class ALS implements Serializable {
             i=i+1;
             uniqueLB.put(lb,i);
             System.out.println("Добавлен еще один "+lb.getDescription());
-           } else {uniqueLB.put(lb,1);
+        } else {uniqueLB.put(lb,1);
             System.out.println("Добавлен уникальный "+lb.getDescription());}
         System.out.println("ДОБАВЛЕН в АКХ: "+lb.getName());
         for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
@@ -127,7 +84,32 @@ public class ALS implements Serializable {
         }
         return lb;
     }
-
+    public Map<LB, Integer> getUniqueLB() {
+        uniqueLB.clear();
+        for(LB lb:lbList){
+            if (uniqueLB.containsKey(lb)){
+                Integer i=uniqueLB.get(lb);
+                i=i+1;
+                uniqueLB.put(lb,i);
+            } else uniqueLB.put(lb,1);
+        }
+        return uniqueLB;
+    }
+    public int getDepthCell() {
+        return depthCell;
+    }
+    public void setDepthCell(int depthCell) {
+        this.depthCell = depthCell;
+    }
+    public void setCountCells(int countCells) {
+        this.countCells = countCells;
+    }
+    public void setLc(LC lc) {
+        this.lc = lc;
+    }
+    public LC getLc() {
+        return lc;
+    }
     public Project getParentProject() {
         return parentProject;
     }
@@ -301,5 +283,18 @@ public class ALS implements Serializable {
 
     public void setColorBody(Colors colorBody) {
         this.colorBody = colorBody;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ALS)) return false;
+        ALS als = (ALS) o;
+        return getHeight() == als.getHeight() && getDepth() == als.getDepth() && getWidth() == als.getWidth() && getUpperFrame() == als.getUpperFrame() && getBottomFrame() == als.getBottomFrame() && getDepthCell() == als.getDepthCell() && getCountCells() == als.getCountCells() && Objects.equals(getLc(), als.getLc()) && getPositionLC() == als.getPositionLC() && getColorDoor() == als.getColorDoor() && getColorBody() == als.getColorBody() && Objects.equals(getLbList(), als.getLbList()) && Objects.equals(getUniqueLB(), als.getUniqueLB());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getHeight(), getDepth(), getWidth(), getUpperFrame(), getBottomFrame(), getDepthCell(), getCountCells(), getLc(), getPositionLC(), getColorDoor(), getColorBody(), getLbList(), getUniqueLB());
     }
 }

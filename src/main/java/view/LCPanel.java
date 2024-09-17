@@ -12,38 +12,32 @@ import java.io.File;
 import java.io.IOException;
 
 public class LCPanel extends JPanel {
-    private JLabel nameLC;
-    private JLabel heightLC;
-    private JTextField widthLC;
-    private JLabel depthLC;
-    private JComboBox<String> display= new JComboBox<>();
-    private JComboBox<String> barReader= new JComboBox<>();
-    private JComboBox<String> payment= new JComboBox<>();
-    private JCheckBox printer= new JCheckBox();
-    private JCheckBox rfidReader= new JCheckBox();
-    private JComboBox<String> positionLC= new JComboBox<>();
-    private JPanel imageLCPanel;
-    private DrawLC drawLC;
+    private final JLabel nameLC;
+    private final JLabel heightLC;
+    private final JTextField widthLC;
+    private final JLabel depthLC;
+    private final JComboBox<String> display= new JComboBox<>();
+    private final JComboBox<String> barReader= new JComboBox<>();
+    private final JComboBox<String> payment= new JComboBox<>();
+    private final JCheckBox printer= new JCheckBox();
+    private final JCheckBox rfidReader= new JCheckBox();
+    private final JComboBox<String> positionLC= new JComboBox<>();
+    private final JPanel imageLCPanel;
+    private final DrawLC drawLC;
 
     public LCPanel(LC lc) {
-        this.setBorder(BorderFactory.createTitledBorder(
+        setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLoweredBevelBorder(), "LCPanel"));
-        // this.setLayout(new GridLayout(5,2));
         nameLC=new JLabel(lc.getName());
         heightLC=new JLabel();
         widthLC =new JTextField(5);
         depthLC=new JLabel();
         imageLCPanel=new JPanel();
-        this.add(this.nameLC);
-        JLabel l1=new JLabel("Высота, мм: ");
-        this.add(l1);
-        this.heightLC.setText(String.valueOf(lc.getHeight()));
-        this.add(this.heightLC);
 
+        JLabel l1=new JLabel("Высота, мм: ");
+        heightLC.setText(String.valueOf(lc.getHeight()));
         JLabel l2=new JLabel("Ширина, мм: ");
-        this.add(l2);
-        this.widthLC.setText(String.valueOf(lc.getWidth()));
-        this.add(this.widthLC);
+        widthLC.setText(String.valueOf(lc.getWidth()));
         widthLC.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,11 +56,8 @@ public class LCPanel extends JPanel {
         });
 
         JLabel l3=new JLabel("Глубина, мм: ");
-        this.add(l3);
-        this.depthLC.setText(String.valueOf(lc.getDepth()));
-        this.add(this.depthLC);
+        depthLC.setText(String.valueOf(lc.getDepth()));
         JLabel l4=new JLabel("Дисплей: ");
-        this.add(l4);
         DisplayLC[] displays=DisplayLC.values();
         for(DisplayLC displayLC:displays){
             display.addItem(String.valueOf(displayLC));
@@ -88,7 +79,6 @@ public class LCPanel extends JPanel {
         });
 
         JLabel l5=new JLabel("Считыватель: ");
-        this.add(l5);
         BarReader[] barReaders=BarReader.values();
         for (BarReader barReader1:barReaders){
             barReader.addItem(String.valueOf(barReader1));
@@ -105,7 +95,6 @@ public class LCPanel extends JPanel {
             }
         });
         JLabel l6=new JLabel("Сканер: ");
-        this.add(l6);
         rfidReader.setSelected(lc.isRfidReader());
         rfidReader.addActionListener(new ActionListener() {
             @Override
@@ -119,7 +108,6 @@ public class LCPanel extends JPanel {
         });
 
         JLabel l7=new JLabel("Принтер: ");
-        this.add(l7);
         printer.setSelected(lc.isPrinter());
         printer.addActionListener(new ActionListener() {
             @Override
@@ -132,7 +120,7 @@ public class LCPanel extends JPanel {
             }
         });
         JLabel l8=new JLabel("Оплата: ");
-        this.add(l8);
+
         Payment[] payments=Payment.values();
         for (Payment payment1:payments){
             payment.addItem(String.valueOf(payment1));
@@ -149,7 +137,7 @@ public class LCPanel extends JPanel {
             }
         });
         JLabel l9=new JLabel("Расположение МУ: ");
-        this.add(l9);
+
         PositionLC[] positionLC1=PositionLC.values();
         for (PositionLC positionLC2:positionLC1){
             positionLC.addItem(String.valueOf(positionLC2));
@@ -165,14 +153,12 @@ public class LCPanel extends JPanel {
                 getParent().repaint();
             }
         });
-
-        this.add(imageLCPanel);
         imageLCPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
         drawLC =new DrawLC(lc);
         imageLCPanel.add(drawLC,BorderLayout.CENTER);
 
         GroupLayout layout = new GroupLayout(this);
-        this.setLayout(layout);
+        setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)

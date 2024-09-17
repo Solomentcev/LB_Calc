@@ -15,20 +15,6 @@ public class LC implements Serializable {
     private Payment payment;
     private boolean printer;
     private boolean rfidReader;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LC)) return false;
-        LC lc = (LC) o;
-        return getHeight() == lc.getHeight() && getWidth() == lc.getWidth() && getDepth() == lc.getDepth();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash( getName(), getHeight(), getWidth(), getDepth());
-    }
-
     public ALS getParentALS() {
         return parentALS;
     }
@@ -123,15 +109,9 @@ public class LC implements Serializable {
     public void setDisplay(DisplayLC display) throws DimensionException {
         this.display = display;
         switch (display){
-            case NONE, LC10 -> {
-                setWidth(300);
-            }
-            case LC17 -> {
-                setWidth(450);
-            }
-            case LC19 -> {
-                setWidth(500);
-            }
+            case NONE, LC10 -> setWidth(300);
+            case LC17 -> setWidth(450);
+            case LC19 -> setWidth(500);
         }
         System.out.println("Дисплей: "+display);
 
@@ -172,6 +152,19 @@ public class LC implements Serializable {
     public void setRfidReader(boolean rfidReader) {
         this.rfidReader = rfidReader;
         System.out.println("Cчитыватель: "+ rfidReader);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LC)) return false;
+        LC lc = (LC) o;
+        return getHeight() == lc.getHeight() && getWidth() == lc.getWidth() && getDepth() == lc.getDepth() && isPrinter() == lc.isPrinter() && isRfidReader() == lc.isRfidReader() && getDisplay() == lc.getDisplay() && getBarReader() == lc.getBarReader() && getPayment() == lc.getPayment();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getHeight(), getWidth(), getDepth(), getDisplay(), getBarReader(), getPayment(), isPrinter(), isRfidReader());
     }
 
     public Map<String,String> getInfoLC(){

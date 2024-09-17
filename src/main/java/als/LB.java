@@ -21,22 +21,6 @@ public class LB implements Serializable {
     private int widthCell;
     private int depthCell;
     private OpenDoorDirection openDoorDirection;
-    public LB(int countCells, int height, int depth, int upperFrame, int bottomFrame){
-        this.height=height;
-        this.depth=depth;
-        this.upperFrame=upperFrame;
-        this.bottomFrame=bottomFrame;
-        this.countCells =countCells;
-        width =420;
-        type=TypeLb.TYPE1;
-        shelfThick=type.getShelfThick();
-        widthCell = width -type.getDeltaWidth();
-        depthCell=depth-20;
-        heightCell = (height - upperFrame - bottomFrame - ((countCells - 1) * shelfThick)) / countCells;
-        name="Модуль хранения на "+countCells+" ячеек("+heightCell+"x"+ widthCell +"x"+depthCell+"), ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
-        System.out.println("Создан: "+name);
-        // System.out.println("Габариты ячеек,ВхШхГ,мм: "+heightCell+"x"+weightCell+"x"+depthCell+".");
-    }
     public LB(int numCells,ALS als, OpenDoorDirection openDoorDirection) {
         setParentALS(als);
         this.countCells = numCells;
@@ -55,17 +39,6 @@ public class LB implements Serializable {
         description=getDescription();
         this.openDoorDirection=openDoorDirection;
         System.out.println("Создан: "+name);
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LB)) return false;
-        LB lb = (LB) o;
-        return getHeight() == lb.getHeight() && getWidth() == lb.getWidth() && getDepth() == lb.getDepth() && getUpperFrame() == lb.getUpperFrame() && getBottomFrame() == lb.getBottomFrame() && getShelfThick() == lb.getShelfThick() && getCountCells() == lb.getCountCells() && Double.compare(lb.getHeightCell(), getHeightCell()) == 0 && getWidthCell() == lb.getWidthCell() && getDepthCell() == lb.getDepthCell();
-    }
-    @Override
-    public int hashCode() {
-        return Objects.hash( getHeight(), getWidth(), getDepth(), getUpperFrame(), getBottomFrame(), getShelfThick(), getCountCells(), getHeightCell(), getWidthCell(), getDepthCell());
     }
     public ALS getParentALS() {
         return parentALS;
@@ -99,13 +72,11 @@ public class LB implements Serializable {
         name="Модуль хранения на "+countCells+" ячеек.";
         return name;
     }
-
     public String getDescription() {
         description="Модуль хранения на "+countCells+" ячеек тип-"+type+" ("+heightCell+"x"+ widthCell +"x"+depthCell+")," +
                 " ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
         return description;
     }
-
     public void setHeightLB(int height) throws DimensionException{
         if (height>2300){
             throw new DimensionException("Высота модуля больше допустимой");
@@ -132,7 +103,6 @@ public class LB implements Serializable {
         } else throw new DimensionException("Слишком большое количество ячеек(Высота ячейки меньше допустимой)");
         parentALS.updateALS();
     }
-
     public void setWidth(int width) throws DimensionException {
         if ( (width>1200))
             throw new DimensionException("Ширина модуля больше допустимой");
@@ -222,6 +192,19 @@ public class LB implements Serializable {
 
     public void setOpenDoorDirection(OpenDoorDirection openDoorDirection) {
         this.openDoorDirection = openDoorDirection;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LB)) return false;
+        LB lb = (LB) o;
+        return getHeight() == lb.getHeight() && getWidth() == lb.getWidth() && getDepth() == lb.getDepth() && getUpperFrame() == lb.getUpperFrame() && getBottomFrame() == lb.getBottomFrame() && getShelfThick() == lb.getShelfThick() && getCountCells() == lb.getCountCells() && Double.compare(lb.getHeightCell(), getHeightCell()) == 0 && getWidthCell() == lb.getWidthCell() && getDepthCell() == lb.getDepthCell() && getType() == lb.getType() && getOpenDoorDirection() == lb.getOpenDoorDirection();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getType(), getHeight(), getWidth(), getDepth(), getUpperFrame(), getBottomFrame(), getShelfThick(), getCountCells(), getHeightCell(), getWidthCell(), getDepthCell(), getOpenDoorDirection());
     }
 
     public Map<String,String> getInfoLB(){

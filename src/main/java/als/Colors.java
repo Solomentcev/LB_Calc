@@ -16,8 +16,8 @@ public enum Colors {
     Red(Color.RED),
     White(Color.WHITE),
     Yellow(Color.YELLOW);
-    Color color;
-    String name;
+    final Color color;
+    final String name;
     Colors(Color color){
         this.color=color;
         name= String.valueOf(this);

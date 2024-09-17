@@ -7,18 +7,18 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LBPanel extends JPanel{
-    private JLabel nameLB=new JLabel();
+    private final JLabel nameLB=new JLabel();
     private final JButton deleteLBButton = new JButton("Удалить");
-    private JComboBox<String> typeLb= new JComboBox<>();
-    private JLabel heightLB=new JLabel();
-    private JTextField widthLB =new JTextField(5);
-    private JLabel depthLB=new JLabel();
-    private JTextField numCellsLB=new JTextField(5);
-    private JLabel heightCellLB=new JLabel();
-    private JTextField widthCellLB =new JTextField(5);
-    private JLabel depthCellLB=new JLabel();
-    private JPanel imageLBPanel=new JPanel();
-    private DrawLB drawLB;
+    private final JComboBox<String> typeLb= new JComboBox<>();
+    private final JLabel heightLB=new JLabel();
+    private final JTextField widthLB =new JTextField(5);
+    private final JLabel depthLB=new JLabel();
+    private final JTextField numCellsLB=new JTextField(5);
+    private final JLabel heightCellLB=new JLabel();
+    private final JTextField widthCellLB =new JTextField(5);
+    private final JLabel depthCellLB=new JLabel();
+    private final JPanel imageLBPanel=new JPanel();
+    private final DrawLB drawLB;
     public JButton getDeleteLBButton() {
         return deleteLBButton;
     }
@@ -35,9 +35,7 @@ public class LBPanel extends JPanel{
         return typeLb;
     }
     public LBPanel(LB lb) {
-        this.nameLB.setText(lb.getName()); //"nameLB"
-        this.add(this.nameLB);
-        this.add(deleteLBButton);
+        nameLB.setText(lb.getName());
 
         JLabel lbType=new JLabel("Тип модуля: ");
         TypeLb[] types=TypeLb.values();
@@ -45,45 +43,22 @@ public class LBPanel extends JPanel{
             typeLb.addItem(String.valueOf(type));
         }
         typeLb.setSelectedItem(String.valueOf(lb.getType()));
-
         JLabel l1=new JLabel("Высота, мм: ");
-        // this.add(l1);
-        this.heightLB.setText(String.valueOf(lb.getHeightLB()));
-       // this.add(this.heightLB);
-
+        heightLB.setText(String.valueOf(lb.getHeightLB()));
         JLabel l2=new JLabel("Ширина, мм: ");
-      //  this.add(l2);
-        this.widthLB.setText(String.valueOf(lb.getWidth()));
-        this.add(this.widthLB);
-
+        widthLB.setText(String.valueOf(lb.getWidth()));
         JLabel l3=new JLabel("Глубина, мм: ");
-        this.add(l3);
-        this.depthLB.setText(String.valueOf(lb.getDepth()));
-        this.add(this.depthLB);
-
+        depthLB.setText(String.valueOf(lb.getDepth()));
         JLabel l4=new JLabel("Кол-во ячеек: ");
-        this.add(l4);
-        this.numCellsLB.setText(String.valueOf(lb.getCountCells()));
-        this.numCellsLB.setColumns(5);
-        this.add(this.numCellsLB);
-
+        numCellsLB.setText(String.valueOf(lb.getCountCells()));
+        numCellsLB.setColumns(5);
         JLabel l5=new JLabel("Высота ячеек, мм: ");
-        this.add(l5);
-        this.heightCellLB.setText(String.valueOf(lb.getHeightCell()));
-        this.add(this.heightCellLB);
-
+        heightCellLB.setText(String.valueOf(lb.getHeightCell()));
         JLabel l6=new JLabel("Ширина ячеек, мм: ");
-        this.add(l6);
-        this.widthCellLB.setText(String.valueOf(lb.getWidthCell()));
-        this.add(this.widthCellLB);
-        this.widthCellLB.setColumns(5);
-
+        widthCellLB.setText(String.valueOf(lb.getWidthCell()));
+        widthCellLB.setColumns(5);
         JLabel l7=new JLabel("Глубина ячеек, мм: ");
-        this.add(l7);
-        this.depthCellLB.setText(String.valueOf(lb.getDepthCell()));
-        this.add(this.depthCellLB);
-
-        this.add(imageLBPanel);
+        depthCellLB.setText(String.valueOf(lb.getDepthCell()));
         drawLB =new DrawLB(lb);
         imageLBPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 
