@@ -37,8 +37,16 @@ public class Controller {
     }
     public void openProject() {
         File file=view.openProject();
-        if (file!=null) {
-            Project project = projectService.readProject(file.getAbsolutePath());
+        if (file!=null) {  String a= file.getName();
+            String[] b=a.split("\\.");
+            String ext=b[b.length-1];
+            Project project;
+            switch (ext) {
+                case "alx" -> project = projectService.readProject(file.getAbsolutePath());
+                case "xml" -> project = projectService.readProjectFromXML(file.getAbsolutePath());
+                default -> throw new IllegalStateException("Unexpected value: " + ext);
+            }
+            
             projectService.addProject(project);
             project.setFile(file);
             projectMap.put(view.initProject(project), project);
@@ -64,15 +72,15 @@ public class Controller {
             String a= file.getName();
            String[] b=a.split("\\.");
            String ext=b[b.length-1];
-           switch (ext){
-                case "alx" : projectService.writeProject(project, file.getAbsolutePath()); break;
-                case "xml" : projectService.writeProjectToXML(project, file.getAbsolutePath()); break;
-                case "docx" : projectService.writeProjectToDOCX(project, file.getAbsolutePath()); break;
-                case "jpg" : projectService.writeProjectToJPG(project, file.getAbsolutePath()); break;
-               case  "png" : projectService.writeProjectToPNG(project, file.getAbsolutePath()); break;
-                case "pdf" : projectService.writeProjectToPDF(project, file.getAbsolutePath()); break;
-                case "xlsx" : projectService.writeProjectToXLSX(project, file.getAbsolutePath()); break;
-        }
+            switch (ext) {
+                case "alx" -> projectService.writeProject(project, file.getAbsolutePath());
+                case "xml" -> projectService.writeProjectToXML(project, file.getAbsolutePath());
+                case "docx" -> projectService.writeProjectToDOCX(project, file.getAbsolutePath());
+                case "jpg" -> projectService.writeProjectToJPG(project, file.getAbsolutePath());
+                case "png" -> projectService.writeProjectToPNG(project, file.getAbsolutePath());
+                case "pdf" -> projectService.writeProjectToPDF(project, file.getAbsolutePath());
+                case "xlsx" -> projectService.writeProjectToXLSX(project, file.getAbsolutePath());
+            }
         }
 
     }

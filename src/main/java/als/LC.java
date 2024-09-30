@@ -1,10 +1,18 @@
 package als;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.*;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "LC")
 public class LC implements Serializable {
-    private ALS parentALS;
+    @XmlTransient
+    @JsonIgnore
+    private ALS parentALS=new ALS();
+    @XmlAttribute(name="nameLC")
     private String name;
     private String description;
     private int height;
@@ -15,35 +23,44 @@ public class LC implements Serializable {
     private Payment payment;
     private boolean printer;
     private boolean rfidReader;
+    private Colors colorBody;
+    public LC(){
+    }
+    @XmlTransient
     public ALS getParentALS() {
         return parentALS;
     }
-
     public void setParentALS(ALS parentALS) {
         this.parentALS = parentALS;
     }
-    public LC(int height, int depth) {
+    public LC(int height, ALS als, int depth) {
+        setParentALS(als);
         this.height=height;
         this.depth=depth;
-        name = getName();
-        description=getDescription();
-        width=300;
         display=(DisplayLC.LC10);
+        width=display.getWidth();
         barReader=BarReader.NONE;
         payment=Payment.NONE;
         printer=false;
         rfidReader=false;
+        colorBody=als.getColorBody();
+        updateName();
+        updateDescription();
         System.out.println("СОЗДАН: " + name);
     }
 
     public String getName() {
-        name = "Модуль управления.";
         return name;
+    }
+    public String updateName() {
+        return name="Модуль управления "+display;
     }
 
     public String getDescription() {
-        description = "Модуль управления, ВхШхГ,мм: " + height + "x" + width + "x" + depth + ".";
         return description;
+    }
+    public String updateDescription() {
+        return description="Модуль управления, ВхШхГ,мм: " + height + "x" + width + "x" + depth + ".";
     }
 
     public void setName(String name) {
@@ -61,8 +78,8 @@ public class LC implements Serializable {
             throw new DimensionException("Высота модуля управления меньше допустимой");
         this.height = height;
         System.out.println("Изменена высота модуля управления на:"+ height + " мм");
-        name = getName();
-        description=getDescription();
+        updateName();
+        updateDescription();
         parentALS.updateALS();
     }
 
@@ -77,8 +94,8 @@ public class LC implements Serializable {
             throw new DimensionException("Глубина модуля управления больше допустимой");
         this.depth = depth;
         System.out.println("Изменена глубина модуля управления на:"+ depth + " мм");
-        name = getName();
-        description=getDescription();
+        updateName();
+        updateDescription();
         parentALS.updateALS();
     }
 
@@ -93,8 +110,8 @@ public class LC implements Serializable {
             throw new DimensionException("Ширина модуля управления больше допустимой");
         this.width = width;
         System.out.println("Изменена ширина модуля управления на:"+ width + " мм");
-        name = getName();
-        description=getDescription();
+        updateName();
+        updateDescription();
         parentALS.updateALS();
     }
 
@@ -113,6 +130,8 @@ public class LC implements Serializable {
             case LC17 -> setWidth(450);
             case LC19 -> setWidth(500);
         }
+        updateName();
+        updateDescription();
         System.out.println("Дисплей: "+display);
 
     }
@@ -123,6 +142,8 @@ public class LC implements Serializable {
 
     public void setBarReader(BarReader barReader) {
         this.barReader = barReader;
+        updateName();
+        updateDescription();
         System.out.println("Сканер:"+barReader);
     }
 
@@ -132,6 +153,8 @@ public class LC implements Serializable {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+        updateName();
+        updateDescription();
         System.out.println("Оплата: "+payment);
 
     }
@@ -142,6 +165,8 @@ public class LC implements Serializable {
 
     public void setPrinter(boolean printer) {
         this.printer = printer;
+        updateName();
+        updateDescription();
         System.out.println("Принтер: "+printer);
     }
 
@@ -151,7 +176,17 @@ public class LC implements Serializable {
 
     public void setRfidReader(boolean rfidReader) {
         this.rfidReader = rfidReader;
+        updateName();
+        updateDescription();
         System.out.println("Cчитыватель: "+ rfidReader);
+    }
+
+    public Colors getColorBody() {
+        return colorBody;
+    }
+
+    public void setColorBody(Colors colorBody) {
+        this.colorBody = colorBody;
     }
 
     @Override
@@ -165,14 +200,5 @@ public class LC implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(getHeight(), getWidth(), getDepth(), getDisplay(), getBarReader(), getPayment(), isPrinter(), isRfidReader());
-    }
-
-    public Map<String,String> getInfoLC(){
-        Map<String, String> LCInfo=new HashMap<>();
-        LCInfo.put("name",name);
-        LCInfo.put("height",String.valueOf(height));
-        LCInfo.put("weight",String.valueOf(width));
-        LCInfo.put("depth", String.valueOf(depth));
-        return LCInfo;
     }
 }

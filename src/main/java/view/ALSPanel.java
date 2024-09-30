@@ -23,14 +23,15 @@ public class ALSPanel extends JPanel {
     JPanel p1=new JPanel();
     JPanel p2=new JPanel();
     private final List<LBPanel> LBPanelList;
+    private final ALS als;
    // private LBPanel lbPanel;
 
     public ALSPanel(ALS als) {
-
+        this.als=als;
         this.setLayout(new BorderLayout());
         p1.setLayout (new FlowLayout(FlowLayout.LEFT));
         this.add(p1, BorderLayout.NORTH);
-        alsInfoPanel = new ALSInfoPanel(als);
+        alsInfoPanel = new ALSInfoPanel(this.als);
         p1.add(alsInfoPanel);
 
         lcpanel = new LCPanel(als.getLc());
@@ -54,6 +55,7 @@ public class ALSPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     als.setDepth(Integer.parseInt(alsInfoPanel.getDepthALS().getText()));
+                    als.updateALS();
                 } catch (NumberFormatException ex) {
                     System.out.println("Введите целое число");
                 } catch (DimensionException ex) {
@@ -72,6 +74,7 @@ public class ALSPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     als.setHeight(Integer.parseInt(alsInfoPanel.getHeightALS().getText()));
+                    als.updateALS();
                 } catch (NumberFormatException ex) {
                     System.out.println("Введите целое число");
                 }
@@ -108,6 +111,7 @@ public class ALSPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 addLBPanel(als.addLb());
+                als.updateALS();
                 alsInfoPanel.refreshALSInfo(als);
                 imageALSPanel.refreshDrawAls(als);
                 revalidate();
@@ -127,14 +131,15 @@ public class ALSPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     lb.setCountCells(Integer.parseInt(lbPanel.getNumCellsLB().getText()));
+                    als.updateALS();
                 } catch (NumberFormatException ex) {
                     System.out.println("Введите целое число");
                 } catch (DimensionException ex) {
                     System.out.println(ex.getMessage());
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
-                alsInfoPanel.refreshALSInfo(lb.getParentALS());
-                imageALSPanel.refreshDrawAls(lb.getParentALS());
+                alsInfoPanel.refreshALSInfo(als);
+                imageALSPanel.refreshDrawAls(als);
                 revalidate();
                 repaint();
             }
@@ -145,14 +150,15 @@ public class ALSPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     lb.setWidthCell(Integer.parseInt(lbPanel.getWidthCellLB().getText()));
+                    als.updateALS();
                 } catch (NumberFormatException ex) {
                     System.out.println("Введите целое число");
                 } catch (DimensionException ex) {
                     System.out.println(ex.getMessage());
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
-                alsInfoPanel.refreshALSInfo(lb.getParentALS());
-                imageALSPanel.refreshDrawAls(lb.getParentALS());
+                alsInfoPanel.refreshALSInfo(als);
+                imageALSPanel.refreshDrawAls(als);
                 revalidate();
                 repaint();
             }
@@ -163,6 +169,7 @@ public class ALSPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     lb.setWidth(Integer.parseInt(lbPanel.getWidthLB().getText()));
+                    als.updateALS();
                 } catch (NumberFormatException ex) {
                     System.out.println("Введите целое число");
                 } catch (DimensionException ex) {
@@ -179,7 +186,6 @@ public class ALSPanel extends JPanel {
         lbPanel.getDeleteLBButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ALS als= lb.getParentALS();
                 als.deleteLB(lb);
                 deleteLBPanel(lbPanel);
                 refreshALSPanel(als);
@@ -193,18 +199,19 @@ public class ALSPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     lb.setType((String) lbPanel.getTypeLb().getSelectedItem());
+                    als.updateALS();
                 } catch (DimensionException ex) {
                     System.out.println(ex.getMessage());
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
-                alsInfoPanel.refreshALSInfo(lb.getParentALS());
-                imageALSPanel.refreshDrawAls(lb.getParentALS());
+                alsInfoPanel.refreshALSInfo(als);
+                imageALSPanel.refreshDrawAls(als);
                 revalidate();
                 repaint();
             }
         });
         p1.add(lbPanel);
-        alsInfoPanel.refreshALSInfo(lb.getParentALS());
+        alsInfoPanel.refreshALSInfo(als);
         revalidate();
         repaint();
         return lbPanel;

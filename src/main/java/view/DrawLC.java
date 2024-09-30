@@ -22,7 +22,7 @@ public class DrawLC extends JPanel {
         upperFrame=lc.getParentALS().getUpperFrame();
         displayHeight=lc.getDisplay().getDisplayHeight();
         displayWidth=lc.getDisplay().getDisplayWidth();
-        colorBody=lc.getParentALS().getColorBody().getColor();
+        colorBody=lc.getColorBody().getColor();
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
     }
     public void paintComponent(Graphics g){

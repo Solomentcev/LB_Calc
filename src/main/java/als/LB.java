@@ -1,15 +1,22 @@
 package als;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "LB")
 public class LB implements Serializable {
+    @XmlTransient
+    @JsonIgnore
     private ALS parentALS;
+    @XmlAttribute(name="nameLB")
     private String name;
     private String description;
-    private TypeLb type;
+    private TypeLb type=TypeLb.TYPE1;
     private int height;
     private int width;
     private int depth;
@@ -21,9 +28,12 @@ public class LB implements Serializable {
     private int widthCell;
     private int depthCell;
     private OpenDoorDirection openDoorDirection;
+    private Colors colorDoor;
+    private Colors colorBody;
+    public LB(){}
     public LB(int numCells,ALS als, OpenDoorDirection openDoorDirection) {
         setParentALS(als);
-        this.countCells = numCells;
+        countCells = numCells;
         height=als.getHeight();
         depth=als.getDepth();
         upperFrame=als.getUpperFrame();
@@ -34,12 +44,15 @@ public class LB implements Serializable {
         shelfThick=type.getShelfThick();
         widthCell = width -type.getDeltaWidth();
         depthCell=depth-20;
-        heightCell = (height - upperFrame - bottomFrame - ((numCells - 1) * shelfThick)) / numCells;
-        name=getName();
-        description=getDescription();
+        heightCell = (height - upperFrame - bottomFrame - ((numCells - 1) * shelfThick)) / countCells;
         this.openDoorDirection=openDoorDirection;
+        colorBody=als.getColorBody();
+        colorDoor=als.getColorDoor();
+        updateName();
+        updateDescription();
         System.out.println("Создан: "+name);
     }
+    @XmlTransient
     public ALS getParentALS() {
         return parentALS;
     }
@@ -69,13 +82,17 @@ public class LB implements Serializable {
         return height;
     }
     public String getName() {
-        name="Модуль хранения на "+countCells+" ячеек.";
         return name;
     }
+    public String updateName() {
+        return name="Модуль хранения на "+countCells+" ячеек.";
+    }
     public String getDescription() {
-        description="Модуль хранения на "+countCells+" ячеек тип-"+type+" ("+heightCell+"x"+ widthCell +"x"+depthCell+")," +
-                " ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
         return description;
+    }
+    public String updateDescription() {
+        return description="Модуль хранения на "+countCells+" ячеек тип-"+type+" ("+heightCell+"x"+ widthCell +"x"+depthCell+")," +
+                " ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
     }
     public void setHeightLB(int height) throws DimensionException{
         if (height>2300){
@@ -86,9 +103,9 @@ public class LB implements Serializable {
         }
         this.height = height;
         heightCell=(height-upperFrame-bottomFrame-(countCells -1)*shelfThick)/ countCells;
-        name=getName();
-        description=getDescription();
-        parentALS.updateALS();
+        updateName();
+        updateDescription();
+        //parentALS.updateALS();
     }
     public void setHeightCell(double heightCell) {
         this.heightCell = heightCell;
@@ -98,8 +115,8 @@ public class LB implements Serializable {
             this.countCells = countCells;
             System.out.println("Изменено кол-во ячеек в модуле хранения №"+(parentALS.getLbList().indexOf(this)+1)+" на " + countCells);
             heightCell = (height - upperFrame - bottomFrame - (countCells - 1) * shelfThick) / countCells;
-            name=getName();
-            description=getDescription();
+            updateName();
+            updateDescription();
         } else throw new DimensionException("Слишком большое количество ячеек(Высота ячейки меньше допустимой)");
         parentALS.updateALS();
     }
@@ -112,9 +129,9 @@ public class LB implements Serializable {
         System.out.println("Изменена ширина модуля на:"+ width + " мм");
         widthCell = width -type.getDeltaWidth();
         System.out.println("Изменена ширина ячеек на:"+ widthCell + " мм");
-        name=getName();
-        description=getDescription();
-        parentALS.updateALS();
+        updateName();
+        updateDescription();
+       // parentALS.updateALS();
     }
     public void setWidthCell(int widthCell) throws DimensionException {
         if ( (widthCell+type.getDeltaWidth()>1200) )
@@ -125,9 +142,9 @@ public class LB implements Serializable {
         System.out.println("ИЗМЕНЕНА ширина ячеек до:"+ widthCell + " мм");
         width = widthCell+type.getDeltaWidth();
         System.out.println("ИЗМЕНЕНА ширина модуля до:"+ width + " мм");
-        name=getName();
-        description=getDescription();
-        parentALS.updateALS();
+        updateName();
+        updateDescription();
+        //parentALS.updateALS();
 
     }
     public void setDepthCell(int depthCell) throws DimensionException {
@@ -137,8 +154,8 @@ public class LB implements Serializable {
             throw new DimensionException("Глубина модуля хранения больше допустимой");
         this.depthCell = depthCell;
         depth = depthCell + 20;
-        name=getName();
-        description=getDescription();
+        updateName();
+        updateDescription();
     }
     public void setDepth(int depth) throws DimensionException {
         if (depth>900)
@@ -147,8 +164,8 @@ public class LB implements Serializable {
             throw new DimensionException("Глубина модуля хранения меньше допустимой");
         this.depth = depth;
         depthCell = depth - 20;
-        name=getName();
-        description=getDescription();
+        updateName();
+        updateDescription();
     }
     public void setType(String type) throws DimensionException {
         if (((height-upperFrame-bottomFrame-(countCells-1)*TypeLb.valueOf(type).getShelfThick())/ countCells)<85 )
@@ -160,8 +177,8 @@ public class LB implements Serializable {
         widthCell=width-this.type.getDeltaWidth();
         System.out.println("ИЗМЕНЕН тип модуля на: "+type);
         heightCell=(height-upperFrame-bottomFrame-(countCells -1)*shelfThick)/ countCells;
-        name=getName();
-        description=getDescription();
+        updateName();
+        updateDescription();
     }
 
     public int getShelfThick() {
@@ -193,6 +210,21 @@ public class LB implements Serializable {
     public void setOpenDoorDirection(OpenDoorDirection openDoorDirection) {
         this.openDoorDirection = openDoorDirection;
     }
+    public Colors getColorDoor() {
+        return colorDoor;
+    }
+
+    public void setColorDoor(Colors colorDoor) {
+        this.colorDoor = colorDoor;
+    }
+
+    public Colors getColorBody() {
+        return colorBody;
+    }
+
+    public void setColorBody(Colors colorBody) {
+        this.colorBody = colorBody;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -205,18 +237,5 @@ public class LB implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(getType(), getHeight(), getWidth(), getDepth(), getUpperFrame(), getBottomFrame(), getShelfThick(), getCountCells(), getHeightCell(), getWidthCell(), getDepthCell(), getOpenDoorDirection());
-    }
-
-    public Map<String,String> getInfoLB(){
-        Map<String,String> LBinfo=new HashMap();
-        LBinfo.put("name", name);
-        LBinfo.put("height",String.valueOf(height));
-        LBinfo.put("weight",String.valueOf(width));
-        LBinfo.put("depth",String.valueOf(depth));
-        LBinfo.put("count_cells",String.valueOf(countCells));
-        LBinfo.put("height_cell",String.valueOf(heightCell));
-        LBinfo.put("weight_cell",String.valueOf(widthCell));
-        LBinfo.put("depth_cell",String.valueOf(depthCell));
-        return LBinfo;
     }
 }

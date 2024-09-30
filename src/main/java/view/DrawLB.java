@@ -33,8 +33,8 @@ public class DrawLB extends JPanel {
         countCells=lb.getCountCells();
         heightCell=lb.getHeightCell();
         openDoorDirection=lb.getOpenDoorDirection();
-        bodyColor =lb.getParentALS().getColorBody().getColor();
-        doorColor =lb.getParentALS().getColorDoor().getColor();
+        bodyColor =lb.getColorBody().getColor();
+        doorColor =lb.getColorDoor().getColor();
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
 
     }

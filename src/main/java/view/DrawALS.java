@@ -40,24 +40,20 @@ public class DrawALS extends JPanel {
         int x=0;
         if (this.positionLC.equals(PositionLC.LEFT)) {
             drawLC(g,x);
-            x=x+lc.getWidth()/10;
+            x = x + (lc.getWidth() / 10);
         }
         for (int i = 0; i < lbList.size(); i++) {
             LB lb = lbList.get(i);
             if ((positionLC.equals(PositionLC.CENTER)) && (i==lbList.size()/2)) {
                 drawLC(g,x);
-                x=x+lc.getWidth()/10;
-                drawLB(g,x,lb);
-                x = x + lb.getWidth() / 10;
+                x = x + (lc.getWidth() / 10);
 
-            } else {
-                drawLB(g,x,lb);
-                x = x + lb.getWidth() / 10;
             }
+            drawLB(g,x,lb);
+            x = x + (lb.getWidth() / 10);
         }
         if (positionLC.equals(PositionLC.RIGHT)) {
             drawLC(g,x);
-            x=x+lc.getWidth()/10;
         }
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
     }

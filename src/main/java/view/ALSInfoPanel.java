@@ -12,20 +12,20 @@ import java.awt.event.ActionListener;
 import java.util.Map;
 
 public class ALSInfoPanel extends JPanel {
-    private JLabel nameALS=new JLabel();
-    private JLabel countLB=new JLabel();
-    private JLabel numCellsSumALS= new JLabel();
-    private JTextField heightALS=new JTextField(5);
-    private JLabel weightALS=new JLabel();
-    private JTextField depthALS=new JTextField(5);
-    private JLabel upperFrameALS=new JLabel();
-    private JLabel bottomFrameALS=new JLabel();
-    private JLabel depthCellALS=new JLabel();
-    private JComboBox<Colors> colorBody= new JComboBox<>();
-    private JComboBox<Colors> colorDoor= new JComboBox<>();
-    private JButton addLBButton= new JButton("Добавить МХ");
-    private JButton deleteALSButton= new JButton("Удалить");
-    private JPanel infoLbPanel=new JPanel();
+    private final JLabel nameALS=new JLabel();
+    private final JLabel countLB=new JLabel();
+    private final JLabel numCellsSumALS= new JLabel();
+    private final JTextField heightALS=new JTextField(5);
+    private final JLabel weightALS=new JLabel();
+    private final JTextField depthALS=new JTextField(5);
+    private final JLabel upperFrameALS=new JLabel();
+    private final JLabel bottomFrameALS=new JLabel();
+    private final JLabel depthCellALS=new JLabel();
+    private final JComboBox<Colors> colorBody= new JComboBox<>();
+    private final JComboBox<Colors> colorDoor= new JComboBox<>();
+    private final JButton addLBButton= new JButton("Добавить МХ");
+    private final JButton deleteALSButton= new JButton("Удалить");
+    private final JPanel infoLbPanel=new JPanel();
 
     public JTextField getHeightALS() {
         return heightALS;
@@ -123,7 +123,6 @@ public class ALSInfoPanel extends JPanel {
 
             }
         });
-        System.out.println("АУУУ");
         infoLbPanel.setLayout(new BoxLayout(infoLbPanel, BoxLayout.Y_AXIS));
 
         infoLbPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -131,7 +130,7 @@ public class ALSInfoPanel extends JPanel {
             JLabel lb1=new JLabel(lb.getKey().getDescription()+" - "+lb.getValue()+" шт.");
             infoLbPanel.add(lb1);
             lb1.setAlignmentX(Component.LEFT_ALIGNMENT);
-            System.out.println("!"+lb.getKey().getDescription()+" - "+lb.getValue()+" шт.");
+
         }
         this.add(infoLbPanel);
         GroupLayout layout = new GroupLayout(this);
@@ -241,7 +240,6 @@ public class ALSInfoPanel extends JPanel {
             JLabel lb1=new JLabel(lb.getKey().getDescription()+" - "+lb.getValue()+" шт.");
             lb1.setAlignmentX(Component.LEFT_ALIGNMENT);
             infoLbPanel.add(lb1);
-            System.out.println("!обновление"+lb.getKey().getDescription()+" - "+lb.getValue()+" шт.");
         }
         revalidate();
         repaint();

@@ -1,11 +1,19 @@
 package als;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.*;
 import java.util.List;
-
+@XmlRootElement(name = "ALS")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ALS implements Serializable {
+    @XmlTransient
+    @JsonIgnore
     private Project parentProject;
+    @XmlAttribute(name="nameALS")
     private String name;
     private String description;
     private int height;
@@ -15,13 +23,20 @@ public class ALS implements Serializable {
     private int bottomFrame;
     private int depthCell;
     private int countCells;
+    @XmlElement(name="LC",type = LC.class)
     private LC lc;
     private PositionLC positionLC;
     private Colors colorDoor;
     private Colors colorBody;
+    @XmlElementWrapper(name="LBList")
+    @XmlElement(name="LB",type = LB.class)
+    private List<LB> lbList=new ArrayList<>();
 
-    private List<LB> lbList;
-    private final Map<LB, Integer> uniqueLB;
+    @XmlTransient
+    @JsonIgnore
+    private final Map<LB, Integer> uniqueLB=new HashMap<>();
+    public ALS(){
+    }
     public ALS(Project project){
         parentProject=project;
         height=1940;
@@ -29,32 +44,29 @@ public class ALS implements Serializable {
         upperFrame=50;
         bottomFrame=50;
         depthCell=depth-20;
-        lc=new LC(height,depth);
         colorBody=Colors.BLUE;
         colorDoor=Colors.White;
-        width = width +lc.getWidth();
+        lc=new LC(height,this,depth);
         lc.setParentALS(this);
-        lbList=new ArrayList<>();
-        uniqueLB=new HashMap<>();
+
+        width = width +lc.getWidth();
         positionLC=PositionLC.CENTER;
-        OpenDoorDirection openDoorDirection = null;
-        if (positionLC == PositionLC.LEFT || positionLC == PositionLC.CENTER) openDoorDirection=OpenDoorDirection.RIGHT;
-        else if (positionLC == PositionLC.RIGHT) openDoorDirection=OpenDoorDirection.LEFT;
+        OpenDoorDirection openDoorDirection =OpenDoorDirection.LEFT;
         LB lb=new LB(5,this, openDoorDirection);
+        lb.setParentALS(this);
+        width=width+lb.getWidth();
         countCells = countCells + lb.getCountCells();
         lbList.add(lb);
         uniqueLB.put(lb,1);
+        updateName();
         System.out.println("СОЗДАНА АКХ:"+getName());
-        for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
-            System.out.println(lb1.getKey().getName()+" - "+lb1.getValue()+" шт.");
-        }
     }
-
     public LB addLb(){
         OpenDoorDirection openDoorDirection = null;
         if (positionLC == PositionLC.LEFT || positionLC == PositionLC.CENTER) openDoorDirection=OpenDoorDirection.RIGHT;
         else if (positionLC == PositionLC.RIGHT) openDoorDirection=OpenDoorDirection.LEFT;
         LB lb=new LB(lbList.get(lbList.size()-1).getCountCells(), this,openDoorDirection);
+        lb.setParentALS(this);
         lbList.add(lb);
         if (positionLC == PositionLC.CENTER) {
             for (int i = 0; i < lbList.size(); i++) {
@@ -68,9 +80,9 @@ public class ALS implements Serializable {
 
         countCells = countCells + lb.getCountCells();
         width = width + lb.getWidth();
-        name=getName();
-        description=getDescription();
-        getUniqueLB();
+        updateName();
+        updateDescription();
+        updateUniqueLB();
         if (uniqueLB.containsKey(lb)){
             Integer i=uniqueLB.get(lb);
             i=i+1;
@@ -84,7 +96,12 @@ public class ALS implements Serializable {
         }
         return lb;
     }
+    @XmlTransient
     public Map<LB, Integer> getUniqueLB() {
+        return uniqueLB;
+    }
+
+    public Map<LB, Integer> updateUniqueLB() {
         uniqueLB.clear();
         for(LB lb:lbList){
             if (uniqueLB.containsKey(lb)){
@@ -110,6 +127,7 @@ public class ALS implements Serializable {
     public LC getLc() {
         return lc;
     }
+    @XmlTransient
     public Project getParentProject() {
         return parentProject;
     }
@@ -119,14 +137,17 @@ public class ALS implements Serializable {
     }
 
     public String getName() {
+        return name;
+    }
+    public String updateName() {
         return name="АКХ на "+ countCells +" ячеек.";
     }
-
     public String getDescription() {
-        description="АКХ на "+ countCells +" ячеек, ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
         return description;
     }
-
+    public String updateDescription() {
+        return description="АКХ на "+ countCells +" ячеек, ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+    }
     public void setName(String name) {
         this.name = name;
     }
@@ -140,16 +161,22 @@ public class ALS implements Serializable {
             }
             lc.setHeight(height);
             this.height = height;
+            updateName();
+            updateDescription();
             System.out.println("ИЗМЕНЕНА Высота АКХ на :"+getHeight());
         } catch (DimensionException e) {
             System.out.println(e.getMessage());
     }
     }
-    public int getWidth() {
+    public int updateWidth() {
         width =lc.getWidth();
         for(LB lb:lbList){
             width = width +lb.getWidth();
         }
+
+        return width;
+    }
+    public int getWidth() {
         return width;
     }
     public void setWidth(int width) {
@@ -166,16 +193,21 @@ public class ALS implements Serializable {
             }
             this.depth = depth;
             depthCell=depth-20;
+            updateName();
+            updateDescription();
             System.out.println("ИЗМЕНЕНА Глубина АКХ на :"+getDepth());
         } catch (DimensionException e) {
             System.out.println(e.getMessage());
     }
     }
-    public int getCountCells() {
+    public int updateCountCells() {
         countCells=0;
         for(LB lb:lbList){
             countCells=countCells+lb.getCountCells();
         }
+        return countCells;
+    }
+    public int getCountCells() {
         return countCells;
     }
     public List<LB> getLbList() {
@@ -200,37 +232,17 @@ public class ALS implements Serializable {
     public void setBottomFrame(int bottomFrame) {
         this.bottomFrame = bottomFrame;
     }
-    public Map<String,String> getInfoAls(){
-        Map<String, String> alsInfo=new HashMap<>();
-        alsInfo.put("name",name);
-        alsInfo.put("count_lb",String.valueOf(lbList.size())+1);
-        alsInfo.put("count_cells",String.valueOf(countCells));
-        alsInfo.put("height",String.valueOf(height));
-        alsInfo.put("weight",String.valueOf(width));
-        alsInfo.put("depth",String.valueOf(depth));
-        alsInfo.put("upper_frame",String.valueOf(upperFrame));
-        alsInfo.put("bottom_frame",String.valueOf(bottomFrame));
-        alsInfo.put("depth_cell",String.valueOf(depthCell));
-        return alsInfo;
-    }
-    public List<Map<String,String>> getInfoLbAls(){
-        List<Map<String, String>> infoLbAls=new ArrayList<>();
-        for(LB lb:lbList){
-            infoLbAls.add(lb.getInfoLB());
-        }
-        return infoLbAls;
-    }
     public void updateALS(){
-        getWidth();
-        getCountCells();
-        getName();
-        getDescription();
-        getUniqueLB();
+        updateWidth();
+        updateCountCells();
+        updateName();
+        updateDescription();
+        updateUniqueLB();
         System.out.println("ИЗМЕНЕНЫ размеры АКХ");
     }
 
     public void deleteLB(LB lb) {
-        getUniqueLB();
+        updateUniqueLB();
         for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
             Integer i=lb1.getValue();
             if (lb.equals(lb1.getKey())){
@@ -240,10 +252,8 @@ public class ALS implements Serializable {
                 else {
                     i=i-1;
                     uniqueLB.put(lb,i);
-
                 }
             }
-
         }
         lbList.remove(lb);
 
@@ -266,6 +276,7 @@ public class ALS implements Serializable {
             } else if ((positionLC==PositionLC.CENTER && i<lbList.size()/2) || positionLC==PositionLC.RIGHT)
                 lbList.get(i).setOpenDoorDirection(OpenDoorDirection.LEFT);
         }
+        updateALS();
         System.out.println("Расположение МУ: "+positionLC);
     }
 
@@ -275,6 +286,9 @@ public class ALS implements Serializable {
 
     public void setColorDoor(Colors colorDoor) {
         this.colorDoor = colorDoor;
+        for (LB lb:lbList){
+            lb.setColorDoor(colorDoor);
+        }
     }
 
     public Colors getColorBody() {
@@ -283,6 +297,10 @@ public class ALS implements Serializable {
 
     public void setColorBody(Colors colorBody) {
         this.colorBody = colorBody;
+        lc.setColorBody(colorBody);
+        for (LB lb:lbList){
+            lb.setColorBody(colorBody);
+        }
     }
 
     @Override
