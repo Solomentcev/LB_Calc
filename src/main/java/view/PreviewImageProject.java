@@ -27,6 +27,11 @@ public class PreviewImageProject extends JFrame  {
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+        ((Graphics2D)this.getGraphics()).setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+        ((Graphics2D)this.getGraphics()).setRenderingHint ( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON );
+        ((Graphics2D)this.getGraphics()).setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        ((Graphics2D)this.getGraphics()).setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
 
         for (ALS als:project.getAlsList()){
             JLabel description=new JLabel(als.getDescription());
@@ -37,7 +42,7 @@ public class PreviewImageProject extends JFrame  {
             imagePanel.add(a);
 
         }
-        setMinimumSize(new Dimension(500,200));
+
         pack();
     }
 

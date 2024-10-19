@@ -27,6 +27,7 @@ public class DrawLC extends JPanel {
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        ((Graphics2D)g).setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
         g.setColor(Color.BLACK);
         drawLC(g,0);
     }

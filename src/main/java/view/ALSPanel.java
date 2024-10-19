@@ -58,8 +58,6 @@ public class ALSPanel extends JPanel {
                     als.updateALS();
                 } catch (NumberFormatException ex) {
                     System.out.println("Введите целое число");
-                } catch (DimensionException ex) {
-                    System.out.println(ex.getMessage());
                 }
                 alsInfoPanel.refreshALSInfo(als);
                 refreshALSPanel(als);
@@ -130,7 +128,7 @@ public class ALSPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    lb.setCountCells(Integer.parseInt(lbPanel.getNumCellsLB().getText()));
+                    lb.changeCountCells(Integer.parseInt(lbPanel.getNumCellsLB().getText()));
                     als.updateALS();
                 } catch (NumberFormatException ex) {
                     System.out.println("Введите целое число");
@@ -198,7 +196,7 @@ public class ALSPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    lb.setType((String) lbPanel.getTypeLb().getSelectedItem());
+                    lb.changeType((String) lbPanel.getTypeLb().getSelectedItem());
                     als.updateALS();
                 } catch (DimensionException ex) {
                     System.out.println(ex.getMessage());

@@ -1,7 +1,6 @@
 package als;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -17,18 +16,19 @@ import java.util.Map;
 @XmlRootElement(name = "Project")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Project implements Serializable {
-    @XmlAttribute(name = "Id")
+    @XmlAttribute(name = "id")
     private int id;
     @XmlAttribute(name = "name")
     private String name;
-
+    @JsonIgnore
     private String description;
     @XmlAttribute(name = "Company")
-    private String company;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private String company="Company";
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @XmlJavaTypeAdapter(ProjectService.LocalDateTimeAdapter.class)
     @XmlAttribute(name = "CreatedDate")
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate= LocalDateTime.now();
+
     @XmlElementWrapper(name="ALSList")
     @XmlElement(name="ALS",type = ALS.class)
     private List<ALS> alsList = new ArrayList<>();
@@ -42,10 +42,7 @@ public class Project implements Serializable {
 
     public Project(int id) {
         this.id=id;
-        createdDate= LocalDateTime.now();
-        company="company";
-        name=company+"_"+id+"_"+createdDate.format(DateTimeFormatter.ofPattern("yyyy_MM_dd"));
-
+        updateName();
         alsList.add(new ALS(this));
         file=null;
         System.out.println("СОЗДАН проект:"+name);
@@ -78,7 +75,11 @@ public class Project implements Serializable {
 
     public void setCompany(String company) {
         this.company = company;
-        name=company+"_"+id+"_"+createdDate.format(DateTimeFormatter.ofPattern("yyyy_MM_dd"));
+        updateName();
+
+    }
+    public String updateName(){
+        return name=company+"_"+id+"_"+createdDate.format(DateTimeFormatter.ofPattern("yyyy_MM_dd"));
     }
 
    public List<ALS> getAlsList() {
@@ -108,13 +109,11 @@ public class Project implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    //@XmlAttribute
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime getCreatedDate() {
         return createdDate;
     }
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }

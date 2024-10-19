@@ -44,6 +44,7 @@ public class Controller {
             switch (ext) {
                 case "alx" -> project = projectService.readProject(file.getAbsolutePath());
                 case "xml" -> project = projectService.readProjectFromXML(file.getAbsolutePath());
+                case "json" -> project = projectService.readProjectFromJSON(file.getAbsolutePath());
                 default -> throw new IllegalStateException("Unexpected value: " + ext);
             }
             
@@ -75,6 +76,7 @@ public class Controller {
             switch (ext) {
                 case "alx" -> projectService.writeProject(project, file.getAbsolutePath());
                 case "xml" -> projectService.writeProjectToXML(project, file.getAbsolutePath());
+                case "json" -> projectService.writeProjectToJSON(project, file.getAbsolutePath());
                 case "docx" -> projectService.writeProjectToDOCX(project, file.getAbsolutePath());
                 case "jpg" -> projectService.writeProjectToJPG(project, file.getAbsolutePath());
                 case "png" -> projectService.writeProjectToPNG(project, file.getAbsolutePath());

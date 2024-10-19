@@ -1,6 +1,7 @@
 package als;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.util.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "LC")
+@JsonRootName(value = "LC")
 public class LC implements Serializable {
     @XmlTransient
     @JsonIgnore
@@ -33,7 +35,7 @@ public class LC implements Serializable {
     public void setParentALS(ALS parentALS) {
         this.parentALS = parentALS;
     }
-    public LC(int height, ALS als, int depth) {
+    public LC( int height, ALS als, int depth) {
         setParentALS(als);
         this.height=height;
         this.depth=depth;
@@ -72,22 +74,29 @@ public class LC implements Serializable {
     }
 
     public void setHeight(int height) throws DimensionException {
+       this.height=height;
+    }
+    public void changeHeight() throws DimensionException {
+        height= parentALS.getHeight();
         if (height> 2300 )
             throw new DimensionException("Высота модуля управления больше допустимой");
         if (height< 500 )
             throw new DimensionException("Высота модуля управления меньше допустимой");
-        this.height = height;
         System.out.println("Изменена высота модуля управления на:"+ height + " мм");
         updateName();
         updateDescription();
-        parentALS.updateALS();
+
     }
+
 
     public int getDepth() {
         return depth;
     }
 
     public void setDepth(int depth) throws DimensionException {
+      this.depth=depth;
+    }
+    public void updateDepth(int depth) throws DimensionException {
         if (depth<350)
             throw new DimensionException("Глубина модуля управления меньше допустимой");
         if (depth>900)
@@ -104,6 +113,9 @@ public class LC implements Serializable {
     }
 
     public void setWidth(int width) throws DimensionException {
+       this.width=width;
+    }
+    public void changeWidth(int width) throws DimensionException {
         if (width<300)
             throw new DimensionException("Ширина модуля управления меньше допустимой");
         if (width>600)

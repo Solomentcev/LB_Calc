@@ -1,6 +1,9 @@
 package als;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
@@ -9,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "LB")
+@JsonRootName(value = "LB")
 public class LB implements Serializable {
     @XmlTransient
     @JsonIgnore
@@ -31,7 +35,8 @@ public class LB implements Serializable {
     private Colors colorDoor;
     private Colors colorBody;
     public LB(){}
-    public LB(int numCells,ALS als, OpenDoorDirection openDoorDirection) {
+
+    public LB(int numCells, ALS als,OpenDoorDirection openDoorDirection) {
         setParentALS(als);
         countCells = numCells;
         height=als.getHeight();
@@ -111,6 +116,9 @@ public class LB implements Serializable {
         this.heightCell = heightCell;
     }
     public void setCountCells(int countCells) throws DimensionException {
+       this.countCells=countCells;
+    }
+    public void changeCountCells(int countCells) throws DimensionException {
         if (countCells>0 & (height-upperFrame-bottomFrame-(countCells -1)*shelfThick)/ countCells>85) {
             this.countCells = countCells;
             System.out.println("Изменено кол-во ячеек в модуле хранения №"+(parentALS.getLbList().indexOf(this)+1)+" на " + countCells);
@@ -168,6 +176,9 @@ public class LB implements Serializable {
         updateDescription();
     }
     public void setType(String type) throws DimensionException {
+       this.type= TypeLb.valueOf(type);
+    }
+    public void changeType(String type) throws DimensionException {
         if (((height-upperFrame-bottomFrame-(countCells-1)*TypeLb.valueOf(type).getShelfThick())/ countCells)<85 )
             throw new DimensionException("Высота ячейки меньше допустимой");
         if ( width-TypeLb.valueOf(type).getDeltaWidth()<100 )

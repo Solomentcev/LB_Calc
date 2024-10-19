@@ -98,6 +98,7 @@ public class View extends JFrame implements ActionListener {
         UIManager.put(
                 "FileChooser.folderNameLabelText", "Путь директории");
         String[][] FILTERS = {
+                {"JSON(*.json)","json" },
                 {"XML(*.xml)","xml" },
                 {"Файлы Проект АКХ (*.alx)","alx"},
         };
@@ -135,6 +136,7 @@ public class View extends JFrame implements ActionListener {
         fileChooser.setDialogTitle("Сохранение файла");
         fileChooser.setSelectedFile(file);
         String[][] FILTERS = {
+                {"JSON(*.json)","json" },
                 {"XML(*.xml)","xml" },
                 {"Файлы Word (*.docx)","docx" },
                 {"Adobe Reader(*.pdf)","pdf" },

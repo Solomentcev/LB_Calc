@@ -37,6 +37,8 @@ public class DrawALS extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        ((Graphics2D)g).setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+        ((Graphics2D)g).setRenderingHint ( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON );
         int x=0;
         if (this.positionLC.equals(PositionLC.LEFT)) {
             drawLC(g,x);
@@ -55,7 +57,7 @@ public class DrawALS extends JPanel {
         if (positionLC.equals(PositionLC.RIGHT)) {
             drawLC(g,x);
         }
-        this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
+        this.setPreferredSize(new Dimension(((width+10)/10+50), ((height+10)/10)+50));
     }
     public void drawLC(Graphics g, int x){
         g.setColor(bodyColor);

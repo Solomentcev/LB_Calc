@@ -1,7 +1,7 @@
 package als;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.List;
 @XmlRootElement(name = "ALS")
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonRootName(value = "ALS")
 public class ALS implements Serializable {
     @XmlTransient
     @JsonIgnore
@@ -35,9 +36,9 @@ public class ALS implements Serializable {
     @XmlTransient
     @JsonIgnore
     private final Map<LB, Integer> uniqueLB=new HashMap<>();
-    public ALS(){
-    }
-    public ALS(Project project){
+    public ALS(){}
+
+    public ALS( Project project){
         parentProject=project;
         height=1940;
         depth=500;
@@ -155,18 +156,23 @@ public class ALS implements Serializable {
         return height;
     }
     public void setHeight(int height) {
+        this.height=height;
+
+    }
+    public void changeHeight(){
         try {
-            for (LB lb:lbList){
-               lb.setHeightLB(height);
-            }
-            lc.setHeight(height);
             this.height = height;
+            for (LB lb:lbList){
+                lb.setHeightLB(height);
+            }
+            lc.changeHeight();
             updateName();
             updateDescription();
             System.out.println("ИЗМЕНЕНА Высота АКХ на :"+getHeight());
         } catch (DimensionException e) {
             System.out.println(e.getMessage());
-    }
+        }
+
     }
     public int updateWidth() {
         width =lc.getWidth();
@@ -185,20 +191,24 @@ public class ALS implements Serializable {
     public int getDepth() {
         return depth;
     }
-    public void setDepth(int depth) throws DimensionException{
-        try {
-            lc.setDepth(depth);
-            for (LB lb:lbList){
-              lb.setDepth(depth);
-            }
-            this.depth = depth;
-            depthCell=depth-20;
-            updateName();
-            updateDescription();
-            System.out.println("ИЗМЕНЕНА Глубина АКХ на :"+getDepth());
-        } catch (DimensionException e) {
-            System.out.println(e.getMessage());
+    public void setDepth(int depth){
+       this.depth=depth;
     }
+    public void updateDepth(){
+            try {
+                lc.setDepth(depth);
+                for (LB lb:lbList){
+                    lb.setDepth(depth);
+                }
+                this.depth = depth;
+                depthCell=depth-20;
+                updateName();
+                updateDescription();
+                System.out.println("ИЗМЕНЕНА Глубина АКХ на :"+getDepth());
+            } catch (DimensionException e) {
+                System.out.println(e.getMessage());
+            }
+
     }
     public int updateCountCells() {
         countCells=0;
@@ -232,8 +242,10 @@ public class ALS implements Serializable {
     public void setBottomFrame(int bottomFrame) {
         this.bottomFrame = bottomFrame;
     }
-    public void updateALS(){
+    public void updateALS() {
+        changeHeight();
         updateWidth();
+        updateDepth();
         updateCountCells();
         updateName();
         updateDescription();
