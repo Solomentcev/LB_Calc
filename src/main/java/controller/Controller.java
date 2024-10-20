@@ -60,7 +60,6 @@ public class Controller {
         String saveDirectory="C:\\Users\\DENIS-SDA\\Desktop\\";
         File file=new File(saveDirectory+"\\"+fileName+"."+"alx");
         project.setFile(file);
-        System.out.println(project.getFile());
         projectService.writeProject(project, file.getAbsolutePath());
 
     }

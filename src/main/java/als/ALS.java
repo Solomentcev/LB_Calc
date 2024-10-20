@@ -2,6 +2,9 @@ package als;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.*;
@@ -10,6 +13,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonRootName(value = "ALS")
 public class ALS implements Serializable {
+    private static final Logger logger = LoggerFactory.getLogger(ALS.class);
     @XmlTransient
     @JsonIgnore
     private Project parentProject;
@@ -59,7 +63,7 @@ public class ALS implements Serializable {
         lbList.add(lb);
         uniqueLB.put(lb,1);
         updateName();
-        System.out.println("СОЗДАНА АКХ:"+getName());
+        logger.info("СОЗДАНА АКХ:"+getName());
     }
     public LB addLb(){
         OpenDoorDirection openDoorDirection = null;
@@ -87,13 +91,10 @@ public class ALS implements Serializable {
             Integer i=uniqueLB.get(lb);
             i=i+1;
             uniqueLB.put(lb,i);
-            System.out.println("Добавлен еще один "+lb.getDescription());
+            logger.info("Добавлен еще один "+lb.getDescription());
         } else {uniqueLB.put(lb,1);
-            System.out.println("Добавлен уникальный "+lb.getDescription());}
-        System.out.println("ДОБАВЛЕН в АКХ: "+lb.getName());
-        for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
-            System.out.println(lb1.getKey().getDescription()+" - "+lb1.getValue()+" шт.");
-        }
+            logger.info("Добавлен уникальный "+lb.getDescription());}
+        logger.info("ДОБАВЛЕН в АКХ: "+lb.getName());
         return lb;
     }
     @XmlTransient
@@ -167,9 +168,8 @@ public class ALS implements Serializable {
             this.height = height;
             updateName();
             updateDescription();
-            System.out.println("ИЗМЕНЕНА Высота АКХ на :"+getHeight());
+            logger.info("ИЗМЕНЕНА Высота АКХ на :"+getHeight());
         } catch (DimensionException e) {
-            System.out.println(e.getMessage());
             throw new DimensionException(e.getMessage());
         }
 
@@ -204,11 +204,9 @@ public class ALS implements Serializable {
                 depthCell=depth-20;
                 updateName();
                 updateDescription();
-                System.out.println("ИЗМЕНЕНА Глубина АКХ на :"+getDepth());
+                logger.info("ИЗМЕНЕНА Глубина АКХ на :"+getDepth());
             } catch (DimensionException e) {
-                System.out.println(e.getMessage());
                 throw new DimensionException(e.getMessage());
-
             }
 
     }
@@ -250,7 +248,7 @@ public class ALS implements Serializable {
         updateName();
         updateDescription();
         updateUniqueLB();
-        System.out.println("ИЗМЕНЕНЫ размеры АКХ");
+        logger.info("ИЗМЕНЕНЫ размеры АКХ");
     }
 
     public void deleteLB(LB lb) {
@@ -268,8 +266,7 @@ public class ALS implements Serializable {
             }
         }
         lbList.remove(lb);
-
-        System.out.printf("УДАЛЕН: "+lb.getName() );
+        logger.info("УДАЛЕН: "+lb.getName() );
         for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
             System.out.println(lb1.getKey().getName()+" - "+lb1.getValue()+" шт.");
         }
@@ -289,7 +286,6 @@ public class ALS implements Serializable {
                 lbList.get(i).setOpenDoorDirection(OpenDoorDirection.LEFT);
         }
         updateALS();
-        System.out.println("Расположение МУ: "+positionLC);
     }
 
     public Colors getColorDoor() {

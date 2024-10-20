@@ -1,6 +1,9 @@
 package view;
 
 import als.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
@@ -10,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ALSPanel extends JPanel {
+    private static final Logger logger = LoggerFactory.getLogger(ALSPanel.class);
     private final ALSInfoPanel alsInfoPanel;
     private final LCPanel lcpanel;
     private final DrawALS imageALSPanel;
@@ -21,7 +25,6 @@ public class ALSPanel extends JPanel {
     JPanel p2=new JPanel();
     private final List<LBPanel> LBPanelList;
     private final ALS als;
-   // private LBPanel lbPanel;
 
     public ALSPanel(ALS als) {
         this.als=als;
@@ -54,9 +57,10 @@ public class ALSPanel extends JPanel {
                     als.changeDepth((Integer.parseInt(alsInfoPanel.getDepthALS().getText())));
 
                 } catch (NumberFormatException ex) {
-                    System.out.println("Введите целое число");
+                    logger.error("Введите целое число");
                 } catch (DimensionException ex) {
-                    throw new RuntimeException(ex);
+                     logger.error(ex.getMessage());
+
                 }
                 alsInfoPanel.refreshALSInfo(als);
                 refreshALSPanel(als);
@@ -72,9 +76,9 @@ public class ALSPanel extends JPanel {
                 try {
                     als.changeHeight(Integer.parseInt(alsInfoPanel.getHeightALS().getText()));
                 } catch (NumberFormatException ex) {
-                    System.out.println("Введите целое число");
+                    logger.error("Введите целое число");
                 } catch (DimensionException ex) {
-                    throw new RuntimeException(ex);
+                    logger.error(ex.getMessage());
                 }
                 alsInfoPanel.refreshALSInfo(als);
                 refreshALSPanel(als);
@@ -131,9 +135,10 @@ public class ALSPanel extends JPanel {
                     lb.changeCountCells(Integer.parseInt(lbPanel.getNumCellsLB().getText()));
                     als.updateALS();
                 } catch (NumberFormatException ex) {
-                    System.out.println("Введите целое число");
+                   logger.error("Введите целое число");
                 } catch (DimensionException ex) {
-                    System.out.println(ex.getMessage());
+                    logger.error(ex.getMessage());
+
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
                 alsInfoPanel.refreshALSInfo(als);
@@ -150,9 +155,9 @@ public class ALSPanel extends JPanel {
                     lb.setWidthCell(Integer.parseInt(lbPanel.getWidthCellLB().getText()));
                     als.updateALS();
                 } catch (NumberFormatException ex) {
-                    System.out.println("Введите целое число");
+                    logger.error("Введите целое число");
                 } catch (DimensionException ex) {
-                    System.out.println(ex.getMessage());
+                    logger.error(ex.getMessage());
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
                 alsInfoPanel.refreshALSInfo(als);
@@ -169,9 +174,9 @@ public class ALSPanel extends JPanel {
                     lb.setWidth(Integer.parseInt(lbPanel.getWidthLB().getText()));
                     als.updateALS();
                 } catch (NumberFormatException ex) {
-                    System.out.println("Введите целое число");
+                    logger.error("Введите целое число");
                 } catch (DimensionException ex) {
-                    throw new RuntimeException(ex);
+                    logger.error(ex.getMessage());
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
                 alsInfoPanel.refreshALSInfo(lb.getParentALS());
@@ -199,7 +204,7 @@ public class ALSPanel extends JPanel {
                     lb.changeType((String) lbPanel.getTypeLb().getSelectedItem());
                     als.updateALS();
                 } catch (DimensionException ex) {
-                    System.out.println(ex.getMessage());
+                    logger.error(ex.getMessage());
                 }
                 lbPanel.refreshLBPanel(lb,LBPanelList.indexOf(lbPanel)+1);
                 alsInfoPanel.refreshALSInfo(als);
@@ -223,7 +228,7 @@ public class ALSPanel extends JPanel {
                     BorderFactory.createLoweredBevelBorder(), "LBPanel"+(LBPanelList.indexOf(lbPanel)+1)));
             lbPanel.refreshLBPanel(als.getLbList().get(LBPanelList.indexOf(lbPanel)),LBPanelList.indexOf(lbPanel)+1);
         }
-        System.out.println("ОБНОВЛЕНА [панель АКХ] " + als.getName());
+        logger.debug("Обновление ALSPanel");
         revalidate();
         repaint();
     }

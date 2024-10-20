@@ -243,7 +243,6 @@ public class ALSInfoPanel extends JPanel {
         }
         revalidate();
         repaint();
-        System.out.println("ОБНОВЛЕНА [панель инфо АКХ]: "+als.getName());
-        System.out.println("-----------");
+
     }
 }

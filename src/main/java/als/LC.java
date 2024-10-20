@@ -2,6 +2,10 @@ package als;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import view.ALSPanel;
+
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.*;
@@ -10,6 +14,7 @@ import java.util.*;
 @XmlRootElement(name = "LC")
 @JsonRootName(value = "LC")
 public class LC implements Serializable {
+    private static final Logger logger = LoggerFactory.getLogger(LC.class);
     @XmlTransient
     @JsonIgnore
     private ALS parentALS=new ALS();
@@ -47,7 +52,7 @@ public class LC implements Serializable {
         colorBody=als.getColorBody();
         updateName();
         updateDescription();
-        System.out.println("СОЗДАН: " + name);
+        logger.info("СОЗДАН: " + name);
     }
 
     public String getName() {
@@ -81,7 +86,7 @@ public class LC implements Serializable {
         if (height< 500 )
             throw new DimensionException("Высота модуля управления меньше допустимой");
         this.height= height;
-        System.out.println("Изменена высота модуля управления на:"+ height + " мм");
+        logger.info("Изменена высота модуля управления на:"+ height + " мм");
         updateName();
         updateDescription();
     }
@@ -100,7 +105,7 @@ public class LC implements Serializable {
         if (depth>900)
             throw new DimensionException("Глубина модуля управления больше допустимой");
         this.depth = depth;
-        System.out.println("Изменена глубина модуля управления на:"+ depth + " мм");
+        logger.info("Изменена глубина модуля управления на:"+ depth + " мм");
         updateName();
         updateDescription();
     }
@@ -118,7 +123,7 @@ public class LC implements Serializable {
         if (width>600)
             throw new DimensionException("Ширина модуля управления больше допустимой");
         this.width = width;
-        System.out.println("Изменена ширина модуля управления на:"+ width + " мм");
+        logger.info("Изменена ширина модуля управления на:"+ width + " мм");
         updateName();
         updateDescription();
         parentALS.updateALS();
@@ -141,8 +146,6 @@ public class LC implements Serializable {
         }
         updateName();
         updateDescription();
-        System.out.println("Дисплей: "+display);
-
     }
 
     public BarReader getBarReader() {
@@ -153,7 +156,6 @@ public class LC implements Serializable {
         this.barReader = barReader;
         updateName();
         updateDescription();
-        System.out.println("Сканер:"+barReader);
     }
 
     public Payment getPayment() {
@@ -164,8 +166,6 @@ public class LC implements Serializable {
         this.payment = payment;
         updateName();
         updateDescription();
-        System.out.println("Оплата: "+payment);
-
     }
 
     public boolean isPrinter() {
@@ -176,7 +176,6 @@ public class LC implements Serializable {
         this.printer = printer;
         updateName();
         updateDescription();
-        System.out.println("Принтер: "+printer);
     }
 
     public boolean isRfidReader() {
@@ -187,7 +186,6 @@ public class LC implements Serializable {
         this.rfidReader = rfidReader;
         updateName();
         updateDescription();
-        System.out.println("Cчитыватель: "+ rfidReader);
     }
 
     public Colors getColorBody() {

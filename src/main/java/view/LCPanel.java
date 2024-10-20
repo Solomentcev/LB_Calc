@@ -1,6 +1,8 @@
 package view;
 
 import als.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class LCPanel extends JPanel {
+    private static final Logger logger = LoggerFactory.getLogger(LCPanel.class);
     private final JLabel nameLC;
     private final JLabel heightLC;
     private final JTextField widthLC;
@@ -44,9 +47,9 @@ public class LCPanel extends JPanel {
                 try {
                     lc.setWidth(Integer.parseInt(widthLC.getText()));
                 } catch (NumberFormatException ex) {
-                    System.out.println("Введите целое число");
+                    logger.info("Введите целое число");
                 } catch (DimensionException ex) {
-                    System.out.println(ex.getMessage());
+                    logger.info(ex.getMessage());
                 }
                 refreshLCPanel(lc);
                 ALSPanel alsPanel= (ALSPanel) getParent().getParent();
@@ -69,7 +72,7 @@ public class LCPanel extends JPanel {
                 try {
                     lc.setDisplay(DisplayLC.valueOf(String.valueOf(display.getSelectedItem())));
                 } catch (DimensionException ex) {
-                    System.out.println(ex.getMessage());
+                    logger.info(ex.getMessage());
                 }
                 refreshLCPanel(lc);
                 ALSPanel alsPanel= (ALSPanel) getParent().getParent();
@@ -237,6 +240,6 @@ public class LCPanel extends JPanel {
         drawLC.refreshDrawLC(lc);
         imageLCPanel.revalidate();
         imageLCPanel.repaint();
-        System.out.println("ОБНОВЛЕНА [панель модуля управления] "+lc.getName());
+        logger.debug("ОБНОВЛЕНА [панель модуля управления] "+lc.getName());
     }
 }

@@ -141,7 +141,7 @@ public class LBPanel extends JPanel{
         drawLB.refreshDrawLB(lb);
         imageLBPanel.revalidate();
         imageLBPanel.repaint();
-        System.out.println("ОБНОВЛЕНА [панель модуля хранения]№"+number+": "+lb.getName());
+
     }
 
 }

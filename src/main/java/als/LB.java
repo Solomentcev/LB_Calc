@@ -2,6 +2,9 @@ package als;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,6 +12,7 @@ import java.util.Objects;
 @XmlRootElement(name = "LB")
 @JsonRootName(value = "LB")
 public class LB implements Serializable {
+    private static final Logger logger = LoggerFactory.getLogger(LB.class);
     @XmlTransient
     @JsonIgnore
     private ALS parentALS;
@@ -50,7 +54,7 @@ public class LB implements Serializable {
         colorDoor=als.getColorDoor();
         updateName();
         updateDescription();
-        System.out.println("Создан: "+name);
+        logger.info("Создан: "+name);
     }
     @XmlTransient
     public ALS getParentALS() {
@@ -115,7 +119,7 @@ public class LB implements Serializable {
     public void changeCountCells(int countCells) throws DimensionException {
         if (countCells>0 & (height-upperFrame-bottomFrame-(countCells -1)*shelfThick)/ countCells>85) {
             this.countCells = countCells;
-            System.out.println("Изменено кол-во ячеек в модуле хранения №"+(parentALS.getLbList().indexOf(this)+1)+" на " + countCells);
+            logger.info("Изменено кол-во ячеек в модуле хранения №"+(parentALS.getLbList().indexOf(this)+1)+" на " + countCells);
             heightCell = (height - upperFrame - bottomFrame - (countCells - 1) * shelfThick) / countCells;
             updateName();
             updateDescription();
@@ -127,9 +131,9 @@ public class LB implements Serializable {
         if ( (width-type.getDeltaWidth())<100 )
             throw new DimensionException("Ширина ячейки меньше допустимой");
         this.width = width;
-        System.out.println("Изменена ширина модуля на:"+ width + " мм");
+        logger.info("Изменена ширина модуля на:"+ width + " мм");
         widthCell = width -type.getDeltaWidth();
-        System.out.println("Изменена ширина ячеек на:"+ widthCell + " мм");
+        logger.info("Изменена ширина ячеек на:"+ widthCell + " мм");
         updateName();
         updateDescription();
        // parentALS.updateALS();
@@ -140,9 +144,9 @@ public class LB implements Serializable {
         if ( widthCell<100 )
             throw new DimensionException("Ширина ячейки меньше допустимой");
         this.widthCell = widthCell;
-        System.out.println("ИЗМЕНЕНА ширина ячеек до:"+ widthCell + " мм");
+        logger.info("ИЗМЕНЕНА ширина ячеек до:"+ widthCell + " мм");
         width = widthCell+type.getDeltaWidth();
-        System.out.println("ИЗМЕНЕНА ширина модуля до:"+ width + " мм");
+        logger.info("ИЗМЕНЕНА ширина модуля до:"+ width + " мм");
         updateName();
         updateDescription();
 
@@ -178,7 +182,7 @@ public class LB implements Serializable {
         this.type = TypeLb.valueOf(type);
         shelfThick= this.type.getShelfThick();
         widthCell=width-this.type.getDeltaWidth();
-        System.out.println("ИЗМЕНЕН тип модуля на: "+type);
+        logger.info("ИЗМЕНЕН тип модуля на: "+type);
         heightCell=(height-upperFrame-bottomFrame-(countCells -1)*shelfThick)/ countCells;
         updateName();
         updateDescription();

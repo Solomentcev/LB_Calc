@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import view.PreviewImageProject;
 import javax.imageio.ImageIO;
 import javax.xml.bind.*;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectService {
+    private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
     private final Map<Integer, Project> projects;
 
     public ProjectService() {
@@ -63,8 +66,9 @@ public class ProjectService {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
             objectOutputStream.writeObject(project);
-            System.out.println("Файл " + fileName + " сохранен.");
+            logger.info("Файл " + fileName + " сохранен.");
         } catch (IOException e) {
+            logger.info("Файл " + fileName + "НЕ сохранен.");
             throw new RuntimeException(e);
         }
     }
@@ -78,7 +82,7 @@ public class ProjectService {
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             marshaller.marshal(project, outFile);
-            System.out.println("Файл "+fileName+" сохранен.");
+            logger.info("Файл "+fileName+" сохранен.");
 
             /*
             ObjectMapper mapperXML = new XmlMapper();
@@ -90,6 +94,7 @@ public class ProjectService {
             System.out.println(projectString); */
 
         } catch (IOException | JAXBException e) {
+            logger.info("Файл " + fileName + "НЕ сохранен.");
             throw new RuntimeException(e);
         }
     }
@@ -122,9 +127,10 @@ public class ProjectService {
 
             p.getImagePanel().paint(g);
             ImageIO.write(im, "jpg", new File(fileName));
-            System.out.println("Файл " + fileName + " сохранен.");
+            logger.info("Файл " + fileName + " сохранен.");
 
         } catch (IOException e) {
+            logger.error("Файл " + fileName + "НЕ сохранен.");
             throw new RuntimeException(e);
 
         }
@@ -140,9 +146,10 @@ public class ProjectService {
             p.getContentPane().paint(im.getGraphics());
             System.out.println(fileName);
             ImageIO.write(im, "png", new File(fileName));
-            System.out.println("Файл " + fileName + " сохранен.");
+            logger.info("Файл " + fileName + " сохранен.");
 
         } catch (IOException e) {
+            logger.error("Файл " + fileName + "НЕ сохранен.");
             throw new RuntimeException(e);
 
         }
@@ -224,9 +231,6 @@ public class ProjectService {
             BufferedReader objectInputStream=new BufferedReader(new FileReader(outFile));
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
-         //   mapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
-         //   mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-         //   mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
             mapper.registerModule(new JavaTimeModule());
             Project project =mapper.readValue(objectInputStream, Project.class);
 
@@ -259,7 +263,6 @@ public class ProjectService {
 
             String projectString = mapper.writeValueAsString(project);
             System.out.println(projectString);
-            System.out.println("Файл "+fileName+" сохранен.");
 
         } catch (IOException e) {
             throw new RuntimeException(e);

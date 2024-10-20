@@ -171,13 +171,6 @@ public class View extends JFrame implements ActionListener {
          int result = fileChooser.showSaveDialog(this);
         FileNameExtensionFilter ff= (FileNameExtensionFilter) fileChooser.getFileFilter();
         file=fileChooser.getSelectedFile();
-        System.out.println("Выбран файл "+file);
-      /*  if (!file.getName().contains("."))
-            file=new File(file.getPath()+"."+ff.getExtensions()[0]);
-        else {
-            file=new File(file.getPath().substring(0,file.getPath().lastIndexOf("."))+"."+ff.getExtensions()[0]);}
-        fileChooser.setSelectedFile(file);
-       */ System.out.println("Установлен файл "+file);
         if (result == JFileChooser.APPROVE_OPTION ) {
             ff=(FileNameExtensionFilter) fileChooser.getFileFilter();
             if (!file.getName().contains("."))
@@ -185,8 +178,6 @@ public class View extends JFrame implements ActionListener {
             else {
                 file=new File(file.getPath().substring(0,file.getPath().lastIndexOf("."))+"."+ff.getExtensions()[0]);}
             fileChooser.setSelectedFile(file);
-            System.out.println("Установлен файл "+file);
-            System.out.println("Файл существует?-"+file+" "+file.exists());
 
             while (file.exists()) {
                 int res=JOptionPane.showConfirmDialog(fileChooser, "Файл " + fileChooser.getSelectedFile()+ " уже существует. Перезаписать?", "", JOptionPane.YES_NO_OPTION);
@@ -201,13 +192,11 @@ public class View extends JFrame implements ActionListener {
                     else {
                         file=new File(file.getPath().substring(0,file.getPath().lastIndexOf("."))+"."+ff.getExtensions()[0]);}
                     fileChooser.setSelectedFile(file);
-                    System.out.println("Установлен файл "+file);
-                    System.out.println("Файл существует?-"+file+" "+file.exists());
                 }
             }
         }
         else file=null;
-        System.out.println("Файл из вью "+file);
+
         return file;
     }
 

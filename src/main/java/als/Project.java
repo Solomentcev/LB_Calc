@@ -1,6 +1,8 @@
 package als;
 
 import com.fasterxml.jackson.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -16,6 +18,7 @@ import java.util.Map;
 @XmlRootElement(name = "Project")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Project implements Serializable {
+    private static final Logger logger = LoggerFactory.getLogger(Project.class);
     @XmlAttribute(name = "id")
     private int id;
     @XmlAttribute(name = "name")
@@ -45,7 +48,7 @@ public class Project implements Serializable {
         updateName();
         alsList.add(new ALS(this));
         file=null;
-        System.out.println("СОЗДАН проект:"+name);
+        logger.info("СОЗДАН проект:"+name);
     }
     public Project(){}
 
@@ -98,10 +101,7 @@ public class Project implements Serializable {
     }
     public void deleteALS(ALS als){
         alsList.remove(als);
-        System.out.println(" УДАЛЕНА АКХ:"+als.getName());
-        for(ALS alss:alsList){
-            System.out.println(alss.getName());
-        }
+        logger.info(" УДАЛЕНА АКХ:"+als.getName());
     }
     public int getId() {
         return id;
