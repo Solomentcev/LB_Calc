@@ -2,7 +2,6 @@ package als;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.*;
@@ -159,18 +158,19 @@ public class ALS implements Serializable {
         this.height=height;
 
     }
-    public void changeHeight(){
+    public void changeHeight(int height) throws DimensionException {
         try {
-            this.height = height;
+            lc.changeHeight(height);
             for (LB lb:lbList){
                 lb.setHeightLB(height);
             }
-            lc.changeHeight();
+            this.height = height;
             updateName();
             updateDescription();
             System.out.println("ИЗМЕНЕНА Высота АКХ на :"+getHeight());
         } catch (DimensionException e) {
             System.out.println(e.getMessage());
+            throw new DimensionException(e.getMessage());
         }
 
     }
@@ -194,9 +194,9 @@ public class ALS implements Serializable {
     public void setDepth(int depth){
        this.depth=depth;
     }
-    public void updateDepth(){
+    public void changeDepth(int depth) throws DimensionException {
             try {
-                lc.setDepth(depth);
+                lc.changeDepth(depth);
                 for (LB lb:lbList){
                     lb.setDepth(depth);
                 }
@@ -207,6 +207,8 @@ public class ALS implements Serializable {
                 System.out.println("ИЗМЕНЕНА Глубина АКХ на :"+getDepth());
             } catch (DimensionException e) {
                 System.out.println(e.getMessage());
+                throw new DimensionException(e.getMessage());
+
             }
 
     }
@@ -243,9 +245,7 @@ public class ALS implements Serializable {
         this.bottomFrame = bottomFrame;
     }
     public void updateALS() {
-        changeHeight();
         updateWidth();
-        updateDepth();
         updateCountCells();
         updateName();
         updateDescription();

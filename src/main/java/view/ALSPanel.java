@@ -1,7 +1,6 @@
 package view;
 
 import als.*;
-
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
@@ -9,8 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.awt.Component.*;
 
 public class ALSPanel extends JPanel {
     private final ALSInfoPanel alsInfoPanel;
@@ -54,10 +51,12 @@ public class ALSPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    als.setDepth(Integer.parseInt(alsInfoPanel.getDepthALS().getText()));
-                    als.updateALS();
+                    als.changeDepth((Integer.parseInt(alsInfoPanel.getDepthALS().getText())));
+
                 } catch (NumberFormatException ex) {
                     System.out.println("Введите целое число");
+                } catch (DimensionException ex) {
+                    throw new RuntimeException(ex);
                 }
                 alsInfoPanel.refreshALSInfo(als);
                 refreshALSPanel(als);
@@ -71,10 +70,11 @@ public class ALSPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    als.setHeight(Integer.parseInt(alsInfoPanel.getHeightALS().getText()));
-                    als.updateALS();
+                    als.changeHeight(Integer.parseInt(alsInfoPanel.getHeightALS().getText()));
                 } catch (NumberFormatException ex) {
                     System.out.println("Введите целое число");
+                } catch (DimensionException ex) {
+                    throw new RuntimeException(ex);
                 }
                 alsInfoPanel.refreshALSInfo(als);
                 refreshALSPanel(als);

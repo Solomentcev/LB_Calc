@@ -1,14 +1,9 @@
 package als;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "LB")
@@ -110,12 +105,11 @@ public class LB implements Serializable {
         heightCell=(height-upperFrame-bottomFrame-(countCells -1)*shelfThick)/ countCells;
         updateName();
         updateDescription();
-        //parentALS.updateALS();
     }
     public void setHeightCell(double heightCell) {
         this.heightCell = heightCell;
     }
-    public void setCountCells(int countCells) throws DimensionException {
+    public void setCountCells(int countCells){
        this.countCells=countCells;
     }
     public void changeCountCells(int countCells) throws DimensionException {
@@ -126,7 +120,6 @@ public class LB implements Serializable {
             updateName();
             updateDescription();
         } else throw new DimensionException("Слишком большое количество ячеек(Высота ячейки меньше допустимой)");
-        parentALS.updateALS();
     }
     public void setWidth(int width) throws DimensionException {
         if ( (width>1200))
@@ -152,7 +145,6 @@ public class LB implements Serializable {
         System.out.println("ИЗМЕНЕНА ширина модуля до:"+ width + " мм");
         updateName();
         updateDescription();
-        //parentALS.updateALS();
 
     }
     public void setDepthCell(int depthCell) throws DimensionException {
@@ -175,7 +167,7 @@ public class LB implements Serializable {
         updateName();
         updateDescription();
     }
-    public void setType(String type) throws DimensionException {
+    public void setType(String type){
        this.type= TypeLb.valueOf(type);
     }
     public void changeType(String type) throws DimensionException {
