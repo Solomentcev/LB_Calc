@@ -10,7 +10,7 @@ import javax.swing.*;
 public class LB_calc {
     private static final Logger logger = LoggerFactory.getLogger(LB_calc.class);
     public static void main(String[] args) {
-        PropertyConfigurator.configure("D:\\LB-Calc\\LB_Calc\\src\\main\\resources\\log4j.properties");
+        PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
         logger.info("Start");
         View view=new View();
         Controller controller=new Controller(view);

@@ -1,18 +1,25 @@
 package controller;
 
+import als.LB;
 import als.Project;
 import als.ProjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import view.ProjectPanel;
 import view.View;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class Controller {
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
     private final View view;
+    private final Properties props = new Properties();
     private final ProjectService projectService=new ProjectService();
     private final Map<ProjectPanel,Project> projectMap =new HashMap<>();
     public Map<ProjectPanel,Project> getProjectMap() {
@@ -24,6 +31,20 @@ public class Controller {
     }
     public void init(){
         view.setTitle("Проекты АКХ");
+        try {
+            props.load(new FileInputStream("src/main/resources/lb_calc.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String homeDirectory=props.getProperty("homeDirectory");
+        Path path = Paths.get(homeDirectory);
+        try {
+            Files.createDirectories(path);
+            logger.info("Создан каталог "+path);
+        } catch (IOException e) {
+            logger.error("Не удалось создать каталог "+path);
+            throw new RuntimeException(e);
+        }
 
     }
     public void exit(){
@@ -84,5 +105,9 @@ public class Controller {
             }
         }
 
+    }
+
+    public Properties getProps() {
+        return props;
     }
 }

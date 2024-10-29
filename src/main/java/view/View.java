@@ -81,7 +81,9 @@ public class View extends JFrame implements ActionListener {
 
     public File openProject() {
         File file=null;
-        JFileChooser fileChooser=new JFileChooser("C:\\Users\\DENIS-SDA\\Desktop\\");
+        String homeDirectory=controller.getProps().getProperty("homeDirectory");
+
+        JFileChooser fileChooser=new JFileChooser(homeDirectory);
 
         UIManager.put(
                 "FileChooser.saveButtonText", "Сохранить");
@@ -129,7 +131,7 @@ public class View extends JFrame implements ActionListener {
     }
 
     public File saveProjectAs(String fileName) {
-        String saveDirectory="C:\\Users\\DENIS-SDA\\Desktop\\";
+        String saveDirectory=controller.getProps().getProperty("homeDirectory");
         File file=new File(saveDirectory+"\\"+fileName+"."+"alx");
         JFileChooser fileChooser=new JFileChooser(saveDirectory);
         fileChooser.setCurrentDirectory(file);
