@@ -4,13 +4,13 @@ import java.awt.*;
 
 public enum Colors {
     Black(Color.BLACK),
-    BLUE(Color.BLUE),
-    Cyan(Color.cyan),
+    Blue(Color.BLUE),
+    Cyan(Color.CYAN),
     DarkGray(Color.DARK_GRAY),
     Gray(Color.GRAY),
     Green(Color.GREEN),
     LightGray(Color.lightGray),
-    Magenta(Color.magenta),
+    Magenta(Color.MAGENTA),
     Orange(Color.ORANGE),
     Pink(Color.PINK),
     Red(Color.RED),

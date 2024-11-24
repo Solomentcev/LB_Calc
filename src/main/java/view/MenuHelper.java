@@ -35,6 +35,7 @@ public class MenuHelper {
 
         addMenuItem(fileMenu, "Новый", view);
         addMenuItem(fileMenu, "Открыть", view);
+        addMenuItem(fileMenu, "Открыть из БД", view);
         addMenuItem(fileMenu, "Сохранить", view);
         addMenuItem(fileMenu, "Сохранить как...", view);
         fileMenu.addSeparator();

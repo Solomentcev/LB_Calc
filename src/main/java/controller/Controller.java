@@ -110,4 +110,11 @@ public class Controller {
     public Properties getProps() {
         return props;
     }
+
+    public void openProjectFromDB() {
+        projectService.loadProjects();
+        view.openProjectsFromDB();
+
+
+    }
 }

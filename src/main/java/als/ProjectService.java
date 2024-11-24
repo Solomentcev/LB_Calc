@@ -1,32 +1,30 @@
 package als;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import view.PreviewImageProject;
+
 import javax.imageio.ImageIO;
 import javax.xml.bind.*;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.transform.stream.StreamSource;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.time.LocalDateTime;
+import java.sql.*;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class ProjectService {
     private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
+    private static final Properties dbProps = new Properties();
     private final Map<Integer, Project> projects;
 
     public ProjectService() {
@@ -68,7 +66,7 @@ public class ProjectService {
             objectOutputStream.writeObject(project);
             logger.info("Файл " + fileName + " сохранен.");
         } catch (IOException e) {
-            logger.info("Файл " + fileName + "НЕ сохранен.");
+            logger.info("Файл " + fileName + " НЕ сохранен.");
             throw new RuntimeException(e);
         }
     }
@@ -94,7 +92,7 @@ public class ProjectService {
             System.out.println(projectString); */
 
         } catch (IOException | JAXBException e) {
-            logger.info("Файл " + fileName + "НЕ сохранен.");
+            logger.info("Файл " + fileName + " НЕ сохранен.");
             throw new RuntimeException(e);
         }
     }
@@ -113,9 +111,6 @@ public class ProjectService {
     public void writeProjectToJPG(Project project, String fileName) {
         try {
             PreviewImageProject p = new PreviewImageProject(project);
-
-            System.out.println(p.getImagePanel().getWidth());
-            System.out.println(p.getImagePanel().getHeight());
             BufferedImage im = new BufferedImage(p.getImagePanel().getWidth(), p.getImagePanel().getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics2D g=im.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
@@ -139,17 +134,13 @@ public class ProjectService {
     public void writeProjectToPNG(Project project, String fileName) {
         try {
             PreviewImageProject p = new PreviewImageProject(project);
-            System.out.println(p.getContentPane().getWidth());
-            System.out.println(p.getContentPane().getHeight());
             BufferedImage im = new BufferedImage(p.getContentPane().getWidth(), p.getContentPane().getHeight(), BufferedImage.TYPE_INT_RGB);
-
             p.getContentPane().paint(im.getGraphics());
-            System.out.println(fileName);
             ImageIO.write(im, "png", new File(fileName));
             logger.info("Файл " + fileName + " сохранен.");
 
         } catch (IOException e) {
-            logger.error("Файл " + fileName + "НЕ сохранен.");
+            logger.error("Файл " + fileName + " НЕ сохранен.");
             throw new RuntimeException(e);
 
         }
@@ -185,9 +176,10 @@ public class ProjectService {
             int id = projects.size() + 1;
             project.setId(id);
             projects.put(id, project);
-
+            logger.info("Проект " + fileName + " открыт.");
             return project;
         } catch (IOException | ClassNotFoundException e) {
+            logger.error("Проект " + fileName + " НЕ удалось открыть.");
             throw new RuntimeException(e);
         }
     }
@@ -219,8 +211,10 @@ public class ProjectService {
             int id = projects.size() + 1;
             project.setId(id);
             projects.put(id, project);
+            logger.info("Проект " + fileName + " открыт.");
             return project;
         } catch (JAXBException e) {
+            logger.error("Проект " + fileName + " НЕ удалось открыть.");
             throw new RuntimeException(e);
         }
     }
@@ -245,8 +239,10 @@ public class ProjectService {
             int id = projects.size() + 1;
             project.setId(id);
             projects.put(id, project);
+            logger.info("Проект " + fileName + " открыт.");
             return project;
         } catch (IOException e) {
+            logger.error("Проект " + fileName + " НЕ удалось открыть.");
             throw new RuntimeException(e);
         }
     }
@@ -260,23 +256,44 @@ public class ProjectService {
          //   mapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
             mapper.registerModule(new JavaTimeModule());
             mapper.writeValue(objectOutputStream, project);
-
-            String projectString = mapper.writeValueAsString(project);
-            System.out.println(projectString);
-
+            logger.info("Файл " + fileName + " сохранен.");
         } catch (IOException e) {
+            logger.error("Файл " + fileName + " НЕ сохранен.");
             throw new RuntimeException(e);
         }
     }
 
-    public static class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
+    public void loadProjects() {
+        try {
+            dbProps.load(new FileInputStream("src/main/resources/db.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try (Connection connection = DriverManager.getConnection(
+                dbProps.getProperty("url"),
+                dbProps.getProperty("user"),
+                dbProps.getProperty("password"))) {
+            // Дальнейшая работа с БД через connection
+            Statement statement = connection.createStatement();
+            String sql="select * from project ";
+            ResultSet result=statement.executeQuery(sql);
+            result.next();
+            String company = result.getString("company");
+            System.out.println(company);
+
+        } catch (SQLException e) {
+            logger.error(String.valueOf(e));
+        }
+    }
+
+    public static class LocalDateTimeAdapter extends XmlAdapter<String, LocalDate> {
         @Override
-        public LocalDateTime unmarshal(String value) {
-            return value == null ? null : LocalDateTime.parse(value);
+        public LocalDate unmarshal(String value) {
+            return value == null ? null : LocalDate.parse(value);
         }
         @Override
-        public String marshal(LocalDateTime localDateTime) {
-            return localDateTime.format(DateTimeFormatter.ofPattern("yyyy_MM_dd"));
+        public String marshal(LocalDate localDate) {
+            return localDate.format(DateTimeFormatter.ofPattern("yyyy_MM_dd"));
         }
     }
 }

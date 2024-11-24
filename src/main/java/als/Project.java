@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
 import java.io.File;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class Project implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @XmlJavaTypeAdapter(ProjectService.LocalDateTimeAdapter.class)
     @XmlAttribute(name = "CreatedDate")
-    private LocalDateTime createdDate= LocalDateTime.now();
+    private LocalDate createdDate= LocalDate.now();
 
     @XmlElementWrapper(name="ALSList")
     @XmlElement(name="ALS",type = ALS.class)
@@ -109,12 +110,12 @@ public class Project implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    public LocalDateTime getCreatedDate() {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    public void setCreatedDate(LocalDateTime createdDate) {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
 }

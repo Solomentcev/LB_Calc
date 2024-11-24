@@ -3,3 +3,5 @@
 .idea/
 target/
 /sonarlint/
+logs/
+projects/

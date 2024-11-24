@@ -48,7 +48,7 @@ public class ALS implements Serializable {
         upperFrame=50;
         bottomFrame=50;
         depthCell=depth-20;
-        colorBody=Colors.BLUE;
+        colorBody=Colors.Blue;
         colorDoor=Colors.White;
         lc=new LC(height,this,depth);
         lc.setParentALS(this);

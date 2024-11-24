@@ -41,6 +41,7 @@ public class View extends JFrame implements ActionListener {
         switch (command){
             case "Новый": {controller.addNewProject(); break;}
             case "Открыть": controller.openProject(); break;
+            case "Открыть из БД": controller.openProjectFromDB(); break;
             case "Сохранить": controller.saveProject(); break;
             case "Сохранить как...": controller.saveProjectAs(); break;
             case "Выход": controller.exit(); break;
@@ -202,5 +203,8 @@ public class View extends JFrame implements ActionListener {
         return file;
     }
 
+    public void openProjectsFromDB() {
+        ProjectsFrame projectsFrame=new ProjectsFrame();
+    }
 }
 
