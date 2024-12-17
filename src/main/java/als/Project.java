@@ -38,21 +38,23 @@ public class Project implements Serializable {
     private List<ALS> alsList = new ArrayList<>();
     @XmlTransient
     @JsonIgnore
+    private final Map<ALS, Integer> uniqueALS=new HashMap<>();
+    @XmlTransient
+    @JsonIgnore
     private File file;
 
     public File getFile() {
         return file;
     }
 
-    public Project(int id) {
-        this.id=id;
+    public Project() {
         updateName();
-        alsList.add(new ALS(this));
+        ALS als=new ALS(this);
+        alsList.add(als);
+        uniqueALS.put(als,1);
         file=null;
         logger.info("СОЗДАН проект:"+name);
     }
-    public Project(){}
-
     public void setFile(File file) {
         this.file = file;
     }
@@ -95,13 +97,31 @@ public class Project implements Serializable {
     public ALS addALS(){
         ALS als=new ALS(this);
         alsList.add(als);
+        updateUniqueALS();
+        if (uniqueALS.containsKey(als)){
+            Integer i=uniqueALS.get(als);
+            i=i+1;
+            uniqueALS.put(als,i);
+            logger.info("Добавлен еще одна "+als.getName());
+        } else {uniqueALS.put(als,1);
+            logger.info("Добавлена уникальная "+als.getName());}
         return als;
-    }
-    public void deleteALS(int id){
-        alsList.remove(id);
     }
     public void deleteALS(ALS als){
         alsList.remove(als);
+        updateUniqueALS();
+        for (Map.Entry<ALS,Integer> als1:uniqueALS.entrySet()){
+            Integer i=als1.getValue();
+            if (als.equals(als1.getKey())){
+                if (als1.getValue()==1) {
+                    uniqueALS.remove(als);
+                    break;}
+                else {
+                    i=i-1;
+                    uniqueALS.put(als,i);
+                }
+            }
+        }
         logger.info(" УДАЛЕНА АКХ:"+als.getName());
     }
     public int getId() {
@@ -118,4 +138,19 @@ public class Project implements Serializable {
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
+    public Map<ALS, Integer> updateUniqueALS() {
+        uniqueALS.clear();
+        for(ALS als:alsList){
+            if (uniqueALS.containsKey(als)){
+                Integer i=uniqueALS.get(als);
+                i=i+1;
+                uniqueALS.put(als,i);
+            } else uniqueALS.put(als,1);
+        }
+        return uniqueALS;
+    }
+    public Map<ALS, Integer> getUniqueALS() {
+        return uniqueALS;
+    }
+
 }

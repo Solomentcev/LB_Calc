@@ -76,7 +76,7 @@ public class DrawALS extends JPanel {
         g.setColor(bodyColor);
         g.fillRoundRect(x,0, lb.getWidth()/10,upperFrame/10, 1,1); //верхняя рама
         g.fillRoundRect(x,(lb.getHeight()-bottomFrame)/10, lb.getWidth()/10,bottomFrame/10, 1,1);//нижняя рама
-        if (lb.getOpenDoorDirection()== OpenDoorDirection.LEFT){
+        if (lb.getDirectionDoorOpening()== DirectionDoorOpening.LEFT){
             g.fillRoundRect(x+(lb.getWidth()-lb.getType().getServiceZoneWidth())/10,(upperFrame)/10,
                     lb.getType().getServiceZoneWidth()/10,(lb.getHeight()-upperFrame- bottomFrame)/10, 1,1);// сервисная планка
             for (int i = 2; i <=lb.getCountCells() ; i++) {
@@ -95,7 +95,7 @@ public class DrawALS extends JPanel {
         g.drawRoundRect(x,0, lb.getWidth()/10,lb.getHeight()/10, 1,1);//габариты модуля
         g.drawRoundRect(x,0, lb.getWidth()/10,upperFrame/10, 1,1); //верхняя рама
         g.drawRoundRect(x,(lb.getHeight()-bottomFrame)/10, lb.getWidth()/10,bottomFrame/10, 1,1);//нижняя рама
-        if (lb.getOpenDoorDirection()== OpenDoorDirection.LEFT){
+        if (lb.getDirectionDoorOpening()== DirectionDoorOpening.LEFT){
             g.drawRoundRect(x+(lb.getWidth()-lb.getType().getServiceZoneWidth())/10,(upperFrame)/10,
                     lb.getType().getServiceZoneWidth()/10,(lb.getHeight()-upperFrame- bottomFrame)/10, 1,1);// сервисная планка
             for (int i = 2; i <=lb.getCountCells() ; i++) {

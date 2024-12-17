@@ -17,6 +17,7 @@ public class ALS implements Serializable {
     @XmlTransient
     @JsonIgnore
     private Project parentProject;
+    private int id;
     @XmlAttribute(name="nameALS")
     private String name;
     private String description;
@@ -55,8 +56,8 @@ public class ALS implements Serializable {
 
         width = width +lc.getWidth();
         positionLC=PositionLC.CENTER;
-        OpenDoorDirection openDoorDirection =OpenDoorDirection.LEFT;
-        LB lb=new LB(5,this, openDoorDirection);
+        DirectionDoorOpening directionDoorOpening =DirectionDoorOpening.LEFT;
+        LB lb=new LB(5,this, directionDoorOpening);
         lb.setParentALS(this);
         width=width+lb.getWidth();
         countCells = countCells + lb.getCountCells();
@@ -66,19 +67,19 @@ public class ALS implements Serializable {
         logger.info("СОЗДАНА АКХ:"+getName());
     }
     public LB addLb(){
-        OpenDoorDirection openDoorDirection = null;
-        if (positionLC == PositionLC.LEFT || positionLC == PositionLC.CENTER) openDoorDirection=OpenDoorDirection.RIGHT;
-        else if (positionLC == PositionLC.RIGHT) openDoorDirection=OpenDoorDirection.LEFT;
-        LB lb=new LB(lbList.get(lbList.size()-1).getCountCells(), this,openDoorDirection);
+        DirectionDoorOpening directionDoorOpening = null;
+        if (positionLC == PositionLC.LEFT || positionLC == PositionLC.CENTER) directionDoorOpening=DirectionDoorOpening.RIGHT;
+        else if (positionLC == PositionLC.RIGHT) directionDoorOpening=DirectionDoorOpening.LEFT;
+        LB lb=new LB(lbList.get(lbList.size()-1).getCountCells(), this,directionDoorOpening);
         lb.setParentALS(this);
         lbList.add(lb);
         if (positionLC == PositionLC.CENTER) {
             for (int i = 0; i < lbList.size(); i++) {
                 if (i<lbList.size()/2) {
-                    openDoorDirection=OpenDoorDirection.LEFT;
-                    lbList.get(i).setOpenDoorDirection(openDoorDirection);
-                }else openDoorDirection=OpenDoorDirection.RIGHT;
-                lbList.get(i).setOpenDoorDirection(openDoorDirection);
+                    directionDoorOpening=DirectionDoorOpening.LEFT;
+                    lbList.get(i).setDirectionDoorOpening(directionDoorOpening);
+                }else directionDoorOpening=DirectionDoorOpening.RIGHT;
+                lbList.get(i).setDirectionDoorOpening(directionDoorOpening);
             }
         }
 
@@ -267,9 +268,6 @@ public class ALS implements Serializable {
         }
         lbList.remove(lb);
         logger.info("УДАЛЕН: "+lb.getName() );
-        for (Map.Entry<LB,Integer> lb1:uniqueLB.entrySet()){
-            System.out.println(lb1.getKey().getName()+" - "+lb1.getValue()+" шт.");
-        }
         updateALS();
     }
 
@@ -281,9 +279,9 @@ public class ALS implements Serializable {
         this.positionLC = positionLC;
         for (int i = 0; i < lbList.size() ; i++) {
             if (positionLC==PositionLC.LEFT) {
-                lbList.get(i).setOpenDoorDirection(OpenDoorDirection.RIGHT);
+                lbList.get(i).setDirectionDoorOpening(DirectionDoorOpening.RIGHT);
             } else if ((positionLC==PositionLC.CENTER && i<lbList.size()/2) || positionLC==PositionLC.RIGHT)
-                lbList.get(i).setOpenDoorDirection(OpenDoorDirection.LEFT);
+                lbList.get(i).setDirectionDoorOpening(DirectionDoorOpening.LEFT);
         }
         updateALS();
     }
@@ -316,11 +314,19 @@ public class ALS implements Serializable {
         if (this == o) return true;
         if (!(o instanceof ALS)) return false;
         ALS als = (ALS) o;
-        return getHeight() == als.getHeight() && getDepth() == als.getDepth() && getWidth() == als.getWidth() && getUpperFrame() == als.getUpperFrame() && getBottomFrame() == als.getBottomFrame() && getDepthCell() == als.getDepthCell() && getCountCells() == als.getCountCells() && Objects.equals(getLc(), als.getLc()) && getPositionLC() == als.getPositionLC() && getColorDoor() == als.getColorDoor() && getColorBody() == als.getColorBody() && Objects.equals(getLbList(), als.getLbList()) && Objects.equals(getUniqueLB(), als.getUniqueLB());
+        return getHeight() == als.getHeight() && getDepth() == als.getDepth() && getWidth() == als.getWidth() && getUpperFrame() == als.getUpperFrame() && getBottomFrame() == als.getBottomFrame() && getDepthCell() == als.getDepthCell() && getCountCells() == als.getCountCells() && Objects.equals(getLc(), als.getLc()) && getPositionLC() == als.getPositionLC() && getColorDoor() == als.getColorDoor() && getColorBody() == als.getColorBody() && Objects.equals(getUniqueLB(), als.getUniqueLB());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getHeight(), getDepth(), getWidth(), getUpperFrame(), getBottomFrame(), getDepthCell(), getCountCells(), getLc(), getPositionLC(), getColorDoor(), getColorBody(), getLbList(), getUniqueLB());
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

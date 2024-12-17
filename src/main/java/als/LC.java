@@ -18,6 +18,7 @@ public class LC implements Serializable {
     @XmlTransient
     @JsonIgnore
     private ALS parentALS=new ALS();
+    private int id;
     @XmlAttribute(name="nameLC")
     private String name;
     private String description;
@@ -207,5 +208,13 @@ public class LC implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(getHeight(), getWidth(), getDepth(), getDisplay(), getBarReader(), getPayment(), isPrinter(), isRfidReader());
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

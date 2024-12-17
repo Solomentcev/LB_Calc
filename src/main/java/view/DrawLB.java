@@ -1,7 +1,8 @@
 package view;
 
+import als.DirectionDoorOpening;
 import als.LB;
-import als.OpenDoorDirection;
+import als.DirectionDoorOpening;
 import als.TypeLb;
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class DrawLB extends JPanel {
     private int depthCell;
     private Color doorColor;
     private Color bodyColor;
-    private OpenDoorDirection openDoorDirection;
+    private DirectionDoorOpening directionDoorOpening;
     private int size;
     public DrawLB(LB lb){
         typeLb=lb.getType();
@@ -32,7 +33,7 @@ public class DrawLB extends JPanel {
         shelfThick=lb.getShelfThick();
         countCells=lb.getCountCells();
         heightCell=lb.getHeightCell();
-        openDoorDirection=lb.getOpenDoorDirection();
+        directionDoorOpening =lb.getDirectionDoorOpening();
         bodyColor =lb.getColorBody().getColor();
         doorColor =lb.getColorDoor().getColor();
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));
@@ -51,7 +52,7 @@ public class DrawLB extends JPanel {
         g.setColor(bodyColor);
         g.fillRoundRect(x,0, width/10,upperFrame/10, 1,1); //верхняя рама
         g.fillRoundRect(x,(height-bottomFrame)/10, width/10,bottomFrame/10, 1,1);//нижняя рама
-        if (openDoorDirection==OpenDoorDirection.LEFT){
+        if (directionDoorOpening ==DirectionDoorOpening.LEFT){
          g.fillRoundRect((width-typeLb.getServiceZoneWidth())/10,(upperFrame)/10,
                  typeLb.getServiceZoneWidth()/10,(height-upperFrame- bottomFrame)/10, 1,1);// сервисная планка
         for (int i = 2; i <=countCells ; i++) {
@@ -70,7 +71,7 @@ public class DrawLB extends JPanel {
         g.drawRoundRect(x,0, width/10,height/10, 1,1);
         g.drawRoundRect(x,0, width/10,upperFrame/10, 1,1); //верхняя рама
         g.drawRoundRect(x,(height-bottomFrame)/10, width/10,bottomFrame/10, 1,1);//нижняя рама
-        if (openDoorDirection==OpenDoorDirection.LEFT){
+        if (directionDoorOpening ==DirectionDoorOpening.LEFT){
             g.drawRoundRect((width-typeLb.getServiceZoneWidth())/10,(upperFrame)/10,
                     typeLb.getServiceZoneWidth()/10,(height-upperFrame- bottomFrame)/10, 1,1);// сервисная планка
             for (int i = 2; i <=countCells ; i++) {
@@ -96,7 +97,7 @@ public class DrawLB extends JPanel {
         shelfThick=lb.getShelfThick();
         countCells=lb.getCountCells();
         heightCell=lb.getHeightCell();
-        openDoorDirection=lb.getOpenDoorDirection();
+        directionDoorOpening =lb.getDirectionDoorOpening();
         bodyColor=lb.getParentALS().getColorBody().getColor();
         doorColor=lb.getParentALS().getColorDoor().getColor();
         this.setPreferredSize(new Dimension((width+10)/10, (height+10)/10));

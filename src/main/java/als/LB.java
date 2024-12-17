@@ -16,6 +16,7 @@ public class LB implements Serializable {
     @XmlTransient
     @JsonIgnore
     private ALS parentALS;
+    private int id;
     @XmlAttribute(name="nameLB")
     private String name;
     private String description;
@@ -30,12 +31,12 @@ public class LB implements Serializable {
     private double heightCell;
     private int widthCell;
     private int depthCell;
-    private OpenDoorDirection openDoorDirection;
+    private DirectionDoorOpening directionDoorOpening;
     private Colors colorDoor;
     private Colors colorBody;
     public LB(){}
 
-    public LB(int numCells, ALS als,OpenDoorDirection openDoorDirection) {
+    public LB(int numCells, ALS als,DirectionDoorOpening directionDoorOpening) {
         setParentALS(als);
         countCells = numCells;
         height=als.getHeight();
@@ -49,7 +50,7 @@ public class LB implements Serializable {
         widthCell = width -type.getDeltaWidth();
         depthCell=depth-20;
         heightCell = (height - upperFrame - bottomFrame - ((numCells - 1) * shelfThick)) / countCells;
-        this.openDoorDirection=openDoorDirection;
+        this.directionDoorOpening = directionDoorOpening;
         colorBody=als.getColorBody();
         colorDoor=als.getColorDoor();
         updateName();
@@ -210,12 +211,12 @@ public class LB implements Serializable {
         return type;
     }
 
-    public OpenDoorDirection getOpenDoorDirection() {
-        return openDoorDirection;
+    public DirectionDoorOpening getDirectionDoorOpening() {
+        return directionDoorOpening;
     }
 
-    public void setOpenDoorDirection(OpenDoorDirection openDoorDirection) {
-        this.openDoorDirection = openDoorDirection;
+    public void setDirectionDoorOpening(DirectionDoorOpening directionDoorOpening) {
+        this.directionDoorOpening = directionDoorOpening;
     }
     public Colors getColorDoor() {
         return colorDoor;
@@ -238,11 +239,19 @@ public class LB implements Serializable {
         if (this == o) return true;
         if (!(o instanceof LB)) return false;
         LB lb = (LB) o;
-        return getHeight() == lb.getHeight() && getWidth() == lb.getWidth() && getDepth() == lb.getDepth() && getUpperFrame() == lb.getUpperFrame() && getBottomFrame() == lb.getBottomFrame() && getShelfThick() == lb.getShelfThick() && getCountCells() == lb.getCountCells() && Double.compare(lb.getHeightCell(), getHeightCell()) == 0 && getWidthCell() == lb.getWidthCell() && getDepthCell() == lb.getDepthCell() && getType() == lb.getType() && getOpenDoorDirection() == lb.getOpenDoorDirection();
+        return getHeight() == lb.getHeight() && getWidth() == lb.getWidth() && getDepth() == lb.getDepth() && getUpperFrame() == lb.getUpperFrame() && getBottomFrame() == lb.getBottomFrame() && getShelfThick() == lb.getShelfThick() && getCountCells() == lb.getCountCells() && Double.compare(lb.getHeightCell(), getHeightCell()) == 0 && getWidthCell() == lb.getWidthCell() && getDepthCell() == lb.getDepthCell() && getType() == lb.getType() && getDirectionDoorOpening() == lb.getDirectionDoorOpening();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getType(), getHeight(), getWidth(), getDepth(), getUpperFrame(), getBottomFrame(), getShelfThick(), getCountCells(), getHeightCell(), getWidthCell(), getDepthCell(), getOpenDoorDirection());
+        return Objects.hash(getType(), getHeight(), getWidth(), getDepth(), getUpperFrame(), getBottomFrame(), getShelfThick(), getCountCells(), getHeightCell(), getWidthCell(), getDepthCell(), getDirectionDoorOpening());
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

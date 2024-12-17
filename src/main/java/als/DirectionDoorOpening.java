@@ -1,6 +1,6 @@
 package als;
 
-public enum OpenDoorDirection {
+public enum DirectionDoorOpening {
     LEFT,
     RIGHT
 }

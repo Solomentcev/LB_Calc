@@ -117,4 +117,11 @@ public class Controller {
 
 
     }
+
+    public void saveProjectToDB() {
+        Project project=projectMap.get(view.getProjectTabPanel().getSelectedProjectPanel());
+        projectService.saveProjectToDB(project);
+
+
+    }
 }
