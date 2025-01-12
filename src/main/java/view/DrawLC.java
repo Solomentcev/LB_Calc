@@ -1,7 +1,6 @@
 package view;
 
-import als.LB;
-import als.LC;
+import model.LC;
 
 import javax.swing.*;
 import java.awt.*;

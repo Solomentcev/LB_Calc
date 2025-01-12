@@ -1,7 +1,7 @@
 package view;
 
-import als.LB;
-import als.TypeLb;
+import model.LB;
+import model.TypeLb;
 
 import javax.swing.*;
 import java.awt.*;

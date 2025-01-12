@@ -1,4 +1,4 @@
-package als;
+package model;
 
 import java.awt.*;
 

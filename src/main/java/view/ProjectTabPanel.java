@@ -1,6 +1,6 @@
 package view;
 
-import als.Project;
+import model.Project;
 
 import javax.swing.*;
 import java.util.ArrayList;

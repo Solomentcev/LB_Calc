@@ -1,6 +1,6 @@
 package view;
 
-import als.Project;
+import model.Project;
 import controller.Controller;
 
 import javax.swing.*;
@@ -12,8 +12,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class View extends JFrame implements ActionListener {

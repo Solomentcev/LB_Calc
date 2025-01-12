@@ -1,4 +1,4 @@
-package als;
+package model;
 
 public enum TypeLb {
     TYPE1(100,5,40),

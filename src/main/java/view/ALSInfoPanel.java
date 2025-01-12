@@ -1,8 +1,8 @@
 package view;
 
-import als.ALS;
-import als.Colors;
-import als.LB;
+import model.ALS;
+import model.Colors;
+import model.LB;
 
 import javax.swing.*;
 

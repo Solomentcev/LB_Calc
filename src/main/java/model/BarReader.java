@@ -1,4 +1,4 @@
-package als;
+package model;
 
 public enum BarReader {
     NONE,

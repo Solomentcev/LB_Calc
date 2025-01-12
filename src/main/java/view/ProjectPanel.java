@@ -1,7 +1,7 @@
 package view;
 
-import als.ALS;
-import als.Project;
+import model.ALS;
+import model.Project;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

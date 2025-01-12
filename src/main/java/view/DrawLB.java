@@ -1,9 +1,8 @@
 package view;
 
-import als.DirectionDoorOpening;
-import als.LB;
-import als.DirectionDoorOpening;
-import als.TypeLb;
+import model.DirectionDoorOpening;
+import model.LB;
+import model.TypeLb;
 
 import javax.swing.*;
 import java.awt.*;

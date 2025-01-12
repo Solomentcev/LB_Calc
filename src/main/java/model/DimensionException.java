@@ -1,4 +1,4 @@
-package als;
+package model;
 
 public class DimensionException extends Exception{
     DimensionException(String msg){

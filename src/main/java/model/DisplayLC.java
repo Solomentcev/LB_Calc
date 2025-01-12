@@ -1,4 +1,4 @@
-package als;
+package model;
 
 public enum DisplayLC {
     NONE(0,0,300),

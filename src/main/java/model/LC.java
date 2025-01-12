@@ -1,10 +1,9 @@
-package als;
+package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import view.ALSPanel;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
