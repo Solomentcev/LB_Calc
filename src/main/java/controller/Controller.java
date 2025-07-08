@@ -36,12 +36,13 @@ public class Controller {
             throw new RuntimeException(e);
         }
         String homeDirectory=props.getProperty("homeDirectory");
+
         Path path = Paths.get(homeDirectory);
         try {
             Files.createDirectories(path);
-            logger.info("Создан каталог "+path);
+            logger.info("Создан каталог {}", path);
         } catch (IOException e) {
-            logger.error("Не удалось создать каталог "+path);
+            logger.error("Не удалось создать каталог {}", path);
             throw new RuntimeException(e);
         }
 
@@ -77,8 +78,8 @@ public class Controller {
     public void saveProject() {
         Project project=projectMap.get(view.getProjectTabPanel().getSelectedProjectPanel());
         String fileName=project.getName();
-        String saveDirectory="C:\\Users\\DENIS-SDA\\Desktop\\";
-        File file=new File(saveDirectory+"\\"+fileName+"."+"alx");
+        //String saveDirectory="C:\\Users\\DENIS-SDA\\Desktop\\";
+        File file=new File(fileName+"."+"alx");
         project.setFile(file);
         projectService.writeProject(project, file.getAbsolutePath());
 

@@ -1,5 +1,6 @@
 package service;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,10 @@ public class ConnectionToMySqlDb {
     public static Connection getConnection() throws SQLException {
         if (connection == null) {
             try {
-                dbProps.load(new FileInputStream("src/main/resources/db.properties"));
+                String os = System.getProperty("os.name").toLowerCase();
+                if (os.equals("linux")) {
+                    dbProps.load(new FileInputStream("src/main/resources/db_linux.properties"));}
+                else {dbProps.load(new FileInputStream("src/main/resources/db.properties"));}
             } catch (IOException e) {
                 logger.error("Не удалось загрузить настройки БД " + String.valueOf(e));
                 throw new RuntimeException(e);

@@ -10,7 +10,11 @@ public class LB_calc {
     private static final Logger logger = LoggerFactory.getLogger(LB_calc.class);
 
     public static void main(String[] args) {
-        PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.equals("linux")) {PropertyConfigurator.configure("src/main/resources/log4j_linux.properties");}
+        else {PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");}
+
         logger.info("Start");
         View view=new View();
         Controller controller=new Controller(view);
