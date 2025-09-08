@@ -55,6 +55,7 @@ public class ProjectPanel extends JPanel{
         jpanel.setLayout(new BoxLayout(jpanel, BoxLayout.Y_AXIS));
 
         alsPanelList=new ArrayList<>();
+        System.out.println(project.getAlsList());
         for (ALS als:project.getAlsList()){
 
             alsPanel = new ALSPanel(als);

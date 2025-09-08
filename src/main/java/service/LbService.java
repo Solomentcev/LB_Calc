@@ -1,11 +1,14 @@
 package service;
 
-import model.ALS;
-import model.LB;
+import model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static service.ConnectionToMySqlDb.getConnection;
 
@@ -152,5 +155,79 @@ public class LbService {
             logger.error("Не удалось добавить МХ в БД "+ String.valueOf(e));
             throw new SQLException(e);
         }
+    }
+
+    public Map<LB, Integer> loadLBListfromDB(int alsId) throws SQLException {
+        Map<LB, Integer> uniqueLB=new HashMap<>();
+        String sqlGetLBFromALS ="select lb_id,quantity from als_lb where als_id=?;";
+        try (Connection connection=getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlGetLBFromALS)){
+            statement.setInt(1, alsId);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                int lbId = result.getInt(1);
+                int quantity=result.getInt(2);
+                LB lb =loadLBFromDB(lbId);
+                uniqueLB.put(lb,quantity);
+                System.out.println("LOAD list LB... "+lb.getDescription());
+            }
+
+        } catch (SQLException e) {
+            logger.error("Не удалось получить список ALS " +String.valueOf(e));
+            throw new SQLException(e);
+        }
+        return uniqueLB;
+    }
+
+    private LB loadLBFromDB(int lbId) throws SQLException {
+        LB lb=new LB();
+        String sqlGetLB ="select lb.id, name,\n" +
+                "       height,width, depth,\n" +
+                "       upper_frame,bottom_frame,\n" +
+                "       shelf_thick,\n" +
+                "       height_cell,width_cell, depth_cell,count_cells,\n" +
+                "       type_lb.type,\n" +
+                "       direction_door_opening,\n" +
+                "       color_body.color as color_body,\n" +
+                "       color_door.color as color_door\n" +
+                "from lb\n" +
+                "         inner join colors color_body on lb.color_body_id=color_body.id\n" +
+                "         inner join colors color_door on lb.color_door_id=color_door.id\n" +
+                "         inner join direction_door_opening on lb.direction_door_opening_id =  direction_door_opening.id\n" +
+                "         inner join type_lb on lb.type_LB_id = type_lb.id\n" +
+                "where lb.id=?;";
+        try (Connection connection=getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlGetLB)){
+            statement.setInt(1, lbId);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                // int alsId = result.getInt(1);
+                String lbName = result.getString("name");
+                lb.setName(lbName);
+                lb.setHeight(result.getInt("height"));
+                String type = result.getString("type");
+                lb.setType(type);
+                lb.setBottomFrame(result.getInt("bottom_frame"));
+                lb.setUpperFrame(result.getInt("upper_frame"));
+                lb.setDepth(result.getInt("depth"));
+                lb.setWidth(result.getInt("width"));
+                lb.setHeightCell(result.getInt("height_cell"));
+                lb.setWidthCell(result.getInt("width_cell"));
+                lb.setDepthCell(result.getInt("depth_cell"));
+                lb.setCountCells(result.getInt("count_cells"));
+                lb.setDirectionDoorOpening(DirectionDoorOpening.valueOf(result.getString("direction_door_opening")));
+                lb.setColorBody(Colors.valueOf(result.getString("color_body")));
+                lb.setColorDoor(Colors.valueOf(result.getString("color_door")));
+                lb.updateName();
+                lb.updateDescription();
+                System.out.println("LOAD LB... "+lb.getDescription());
+            }
+        } catch (SQLException e) {
+            logger.error("Не удалось получить LB" + e);
+            throw new SQLException(e);
+        } catch (DimensionException e) {
+            throw new RuntimeException(e);
+        }
+        return lb;
     }
 }

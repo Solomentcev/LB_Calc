@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.*;
 
 public class Controller {
@@ -21,6 +22,7 @@ public class Controller {
     private final Properties props = new Properties();
     private final ProjectService projectService=new ProjectService();
     private final Map<ProjectPanel,Project> projectMap =new HashMap<>();
+
     public Map<ProjectPanel,Project> getProjectMap() {
         return projectMap;
     }
@@ -56,6 +58,7 @@ public class Controller {
         Project project=projectService.createProject();
         projectMap.put(view.initProject(project),project);
     }
+
     public void openProject() {
         File file=view.openProject();
         if (file!=null) {  String a= file.getName();
@@ -69,7 +72,7 @@ public class Controller {
                 default -> throw new IllegalStateException("Unexpected value: " + ext);
             }
             
-            projectService.addProject(project);
+          //  projectService.addProject(project);
             project.setFile(file);
             projectMap.put(view.initProject(project), project);
         }
@@ -112,8 +115,7 @@ public class Controller {
     }
 
     public void openProjectFromDB() {
-        projectService.loadProjects();
-        view.openProjectsFromDB();
+        view.openProjectsFromDB(projectService.loadProjects());
 
 
     }
@@ -123,5 +125,9 @@ public class Controller {
         projectService.saveProjectToDB(project);
 
 
+    }
+
+    public void removeProject(Project project) throws SQLException {
+        projectService.removeProject(project);
     }
 }

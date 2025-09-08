@@ -89,6 +89,27 @@ public class LB implements Serializable {
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setType(TypeLb type) {
+        this.type = type;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setShelfThick(int shelfThick) {
+        this.shelfThick = shelfThick;
+    }
+
     public String updateName() {
         return name="Модуль хранения на "+countCells+" ячеек.";
     }

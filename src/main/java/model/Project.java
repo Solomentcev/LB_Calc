@@ -11,10 +11,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 @XmlRootElement(name = "Project")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Project implements Serializable {
@@ -37,7 +35,7 @@ public class Project implements Serializable {
     private List<ALS> alsList = new ArrayList<>();
     @XmlTransient
     @JsonIgnore
-    private final Map<ALS, Integer> uniqueALS=new HashMap<>();
+    private  Map<ALS, Integer> uniqueALS=new HashMap<>();
     @XmlTransient
     @JsonIgnore
     private File file;
@@ -47,12 +45,17 @@ public class Project implements Serializable {
     }
 
     public Project() {
-        updateName();
-        ALS als=new ALS(this);
-        alsList.add(als);
-        uniqueALS.put(als,1);
-        file=null;
-        logger.info("СОЗДАН проект:"+name);
+
+    }
+    public Project createProject() {
+         Project project = new Project();
+         updateName();
+         ALS als=new ALS(this);
+         alsList.add(als);
+         uniqueALS.put(als,1);
+         file=null;
+         logger.info("СОЗДАН проект:"+name);
+         return project;
     }
     public void setFile(File file) {
         this.file = file;
@@ -104,6 +107,7 @@ public class Project implements Serializable {
             logger.info("Добавлен еще одна "+als.getName());
         } else {uniqueALS.put(als,1);
             logger.info("Добавлена уникальная "+als.getName());}
+        updateDescription();
         return als;
     }
     public void deleteALS(ALS als){
@@ -121,6 +125,7 @@ public class Project implements Serializable {
                 }
             }
         }
+        updateUniqueALS();
         logger.info(" УДАЛЕНА АКХ:"+als.getName());
     }
     public int getId() {
@@ -146,10 +151,34 @@ public class Project implements Serializable {
                 uniqueALS.put(als,i);
             } else uniqueALS.put(als,1);
         }
+        updateDescription();
         return uniqueALS;
     }
     public Map<ALS, Integer> getUniqueALS() {
         return uniqueALS;
     }
 
+    public void setUniqueALS(Map<ALS, Integer> uniqueALS) {
+        this.uniqueALS = uniqueALS;
+    }
+    public String updateDescription(){
+        StringBuilder builder=new StringBuilder();
+        for(Map.Entry<ALS,Integer> als:uniqueALS.entrySet()){
+            builder.append(als.getKey().getDescription()).append(" - ").append(als.getValue()).append(" шт. \n");
+        }
+        description=builder.toString();
+        return description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Project project = (Project) o;
+        return getId() == project.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
 }

@@ -29,14 +29,19 @@ import static service.ConnectionToMySqlDb.getConnection;
 public class ProjectService {
     private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
     private AlsService alsService=new AlsService();
-    private final List<Project> projects=new ArrayList<>();
+    private final Set<Project> projects=new HashSet<>();
 
     public ProjectService() {
     }
 
     public Project  createProject() {
         Project project = new Project();
-        projects.add(project);
+        project.updateName();
+        ALS als=new ALS(project);
+        project.getAlsList().add(als);
+        project.getUniqueALS().put(als,1);
+        logger.info("СОЗДАН проект:"+project.getName());
+      //  projects.add(project);
         return project;
     }
 
@@ -245,18 +250,43 @@ public class ProjectService {
         }
     }
 
-    public void loadProjects() {
+    public Set<Project> loadProjects() {
         try (Connection connection=getConnection();
              Statement statement = connection.createStatement()) {
             String sql="select * from project ";
             ResultSet result=statement.executeQuery(sql);
-            result.next();
-            String company = result.getString("company");
-            System.out.println(company);
+            while (result.next()) {
+                int projectId = result.getInt("id");
+                String name = result.getString("name");
+                String company = result.getString("company");
+                LocalDate createdDate = result.getDate("created_date").toLocalDate();
+                Project project=new Project();
+                project.setId(projectId);
+                project.setName(name);
+                project.setCompany(company);
+                project.setCreatedDate(createdDate);
+                Map<ALS,Integer> uniqueALS=alsService.loadALSListFromDB(projectId);
+                List<ALS> alsList=new ArrayList<>();
+                for (Map.Entry<ALS,Integer> als:uniqueALS.entrySet()) {
+                    for (int i = 0; i < als.getValue(); i++) {
+                        alsList.add(als.getKey());
+                        als.getKey().setParentProject(project);
+                    }
+                }
+
+                project.setUniqueALS(uniqueALS);
+                project.setAlsList(alsList);
+                project.updateDescription();
+                projects.add(project);
+                System.out.println("LOAD project... "+project.getName()+" "+project.getDescription());
+
+            }
+            System.out.println(projects);
 
         } catch (SQLException e) {
             logger.error(String.valueOf(e));
         }
+        return projects;
     }
 
     public void saveProjectToDB(Project project) {
@@ -382,6 +412,23 @@ public class ProjectService {
             throw new SQLException(e);
         }
     }
+
+    public void removeProject(Project project){
+        String deleteProject="delete from project where id=?;";
+        try (Connection connection=getConnection();
+             PreparedStatement statement = connection.prepareStatement(deleteProject))
+        {
+            deleteALSFromProject(project);
+            statement.setInt(1, project.getId());
+            statement.executeUpdate();
+            projects.remove(project);
+            logger.info("Проект удален ");
+        } catch (SQLException e) {
+            logger.error("Не удалось удалить проект "+ e);
+
+        }
+    }
+
     public static class LocalDateTimeAdapter extends XmlAdapter<String, LocalDate> {
         @Override
         public LocalDate unmarshal(String value) {

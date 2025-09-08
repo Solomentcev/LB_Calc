@@ -39,7 +39,7 @@ public class ALS implements Serializable {
 
     @XmlTransient
     @JsonIgnore
-    private final Map<LB, Integer> uniqueLB=new HashMap<>();
+    private Map<LB, Integer> uniqueLB=new HashMap<>();
     public ALS(){}
 
     public ALS( Project project){
@@ -148,7 +148,7 @@ public class ALS implements Serializable {
         return description;
     }
     public String updateDescription() {
-        return description="АКХ на "+ countCells +" ячеек, ВхШхГ,мм: "+height+"x"+ width +"x"+depth+".";
+        return description="АКХ на "+ countCells +" ячеек, ВхШхГ,мм: "+height+"x"+ width +"x"+depth+". Цвет: "+colorBody+"/"+colorDoor;
     }
     public void setName(String name) {
         this.name = name;
@@ -245,10 +245,10 @@ public class ALS implements Serializable {
     }
     public void updateALS() {
         updateWidth();
+        updateUniqueLB();
         updateCountCells();
         updateName();
         updateDescription();
-        updateUniqueLB();
         logger.info("ИЗМЕНЕНЫ размеры АКХ");
     }
 
@@ -328,5 +328,9 @@ public class ALS implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setUniqueLB(Map<LB, Integer> uniqueLB) {
+        this.uniqueLB = uniqueLB;
     }
 }

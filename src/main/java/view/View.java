@@ -12,11 +12,15 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.List;
+import java.util.Set;
 
 
 public class View extends JFrame implements ActionListener {
     private Controller controller;
     private final ProjectTabPanel projectTabPanel =new ProjectTabPanel();
+    private Set<Project> projects;
+    private final ProjectsFrame projectsFrame=new ProjectsFrame();
 
     public View() {
         try {
@@ -71,13 +75,14 @@ public class View extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(this, "Проекты АКХ", "О программе", JOptionPane.INFORMATION_MESSAGE);
     }
     public ProjectPanel initProject(Project project){
+        System.out.println(project.getName());
+        System.out.println(project.getDescription());
         projectTabPanel.addProjectPanel(project);
         getContentPane().add(projectTabPanel,BorderLayout.CENTER);
         setMinimumSize(new Dimension(500,200));
         pack();
         return (ProjectPanel) projectTabPanel.getSelectedComponent();
     }
-
 
     public File openProject() {
         File file=null;
@@ -202,8 +207,8 @@ public class View extends JFrame implements ActionListener {
         return file;
     }
 
-    public void openProjectsFromDB() {
-        ProjectsFrame projectsFrame=new ProjectsFrame();
+    public void openProjectsFromDB(Set<Project> projects) {
+        projectsFrame.displayProjects(projects,this);
     }
 }
 

@@ -8,12 +8,11 @@ import java.util.List;
 
 public class ProjectTabPanel extends JTabbedPane {
     private List<ProjectPanel> projectPanelsList=new ArrayList<>();
-    public List<ProjectPanel> getProjectPanelsList() {
-        return projectPanelsList;
-    }
+
     public ProjectTabPanel(){
         super();
     }
+
     public ProjectPanel addProjectPanel(Project project) {
 
         ProjectPanel projectPanel=new ProjectPanel(project);
@@ -27,5 +26,8 @@ public class ProjectTabPanel extends JTabbedPane {
     }
     public ProjectPanel getSelectedProjectPanel(){
         return (ProjectPanel) this.getSelectedComponent();
+    }
+    public List<ProjectPanel> getProjectPanelsList() {
+        return projectPanelsList;
     }
 }

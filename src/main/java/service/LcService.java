@@ -1,6 +1,6 @@
 package service;
 
-import model.LC;
+import model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,5 +124,52 @@ public class LcService {
             logger.error("Не удалось добавить МУ в БД "+ String.valueOf(e));
             throw new SQLException(e);
         }
+    }
+
+    public LC loadLCFromDB(int lcId) throws SQLException {
+        LC lc=new LC();
+        String sqlGetLC ="select lc.id, name, height,width, depth, display, reader, payment, printer, rfid_reader, color\n" +
+                "from lc, display, bar_reader, payment, colors\n" +
+                "             where lc.id=? and\n" +
+                "             lc.display_id=display.id and\n" +
+                "             lc.payment_id=payment.id and\n" +
+                "             lc.color_body_id=colors.id and\n" +
+                "             lc.bar_reader_id=bar_reader.id;";
+        try (Connection connection=getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlGetLC)){
+            statement.setInt(1, lcId);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                String lcName = result.getString("name");
+                lc.setName(lcName);
+                int height = result.getInt("height");
+                lc.setHeight(height);
+                int width = result.getInt("width");
+                lc.setWidth(width);
+                int depth = result.getInt("depth");
+                lc.setDepth(depth);
+                String display = result.getString("display");
+                lc.setDisplay(DisplayLC.valueOf(String.valueOf(display).toUpperCase()));
+                String reader = result.getString("reader");
+                lc.setBarReader(BarReader.valueOf(String.valueOf(reader).toUpperCase()));
+                String payment= result.getString("payment");
+                lc.setPayment(Payment.valueOf(String.valueOf(payment).toUpperCase()));
+                boolean printer = result.getBoolean("printer");
+                lc.setPrinter(printer);
+                boolean rfidReader = result.getBoolean("rfid_reader");
+                lc.setRfidReader(rfidReader);
+                String colorBody = result.getString("color");
+                lc.setColorBody(Colors.valueOf(String.valueOf(colorBody)));
+                lc.updateDescription();
+                lc.updateName();
+                System.out.println("Load "+lc.getDescription());
+            }
+        } catch (SQLException e) {
+            logger.error("Не удалось получить LC" + e);
+            throw new SQLException(e);
+        } catch (DimensionException e) {
+            throw new RuntimeException(e);
+        }
+        return lc;
     }
 }

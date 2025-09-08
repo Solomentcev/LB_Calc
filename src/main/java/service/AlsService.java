@@ -1,12 +1,13 @@
 package service;
 
-import model.ALS;
-import model.LB;
+import model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import view.LCPanel;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static service.ConnectionToMySqlDb.getConnection;
@@ -161,5 +162,91 @@ public class AlsService {
             logger.error("Не удалось получить id colorbody АКХ " +String.valueOf(e));
             throw new SQLException(e);
         }
+    }
+
+    public Map<ALS,Integer> loadALSListFromDB(int projectId) throws SQLException {
+        Map<ALS,Integer> uniqueALS = new HashMap<>();
+        String sqlGetALSFromProject ="select als_id,quantity from project_als where project_id=?;";
+        try (Connection connection=getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlGetALSFromProject)){
+            statement.setInt(1, projectId);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                int alsId = result.getInt(1);
+                int quantity=result.getInt(2);
+                ALS als =loadALSFromDB(alsId);
+                uniqueALS.put(als,quantity);
+                System.out.println("LOAD list ALS... "+als.getDescription());
+            }
+
+        } catch (SQLException e) {
+            logger.error("Не удалось получить список ALS " +String.valueOf(e));
+            throw new SQLException(e);
+        }
+        return uniqueALS;
+    }
+
+    private ALS loadALSFromDB(int alsId) throws SQLException {
+        ALS als = new ALS();
+        String sqlGetALS ="select als.id, name, height,width, depth, upper_frame,bottom_frame,depth_cell,count_cells,\n" +
+                "       lc_id, position_lc.position,\n" +
+                "        color_body.color as color_body,\n" +
+                "        color_door.color as color_door\n" +
+                "from als\n" +
+                "\n" +
+                "inner join colors color_body on als.color_body_id=color_body.id\n" +
+                "inner join colors color_door on als.color_door_id=color_door.id\n" +
+                "inner join position_lc on als.position_LC_id = position_lc.id\n" +
+                "where als.id=?\n";
+        try (Connection connection=getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlGetALS)){
+            statement.setInt(1, alsId);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+               // int alsId = result.getInt(1);
+                String alsName = result.getString(2);
+                als.setId(alsId);
+                als.setName(alsName);
+                int height = result.getInt(3);
+                als.setHeight(height);
+                int width = result.getInt(4);
+                als.setWidth(width);
+                int depth = result.getInt(5);
+                als.setDepth(depth);
+                int upperFrame = result.getInt(6);
+                als.setUpperFrame(upperFrame);
+                int bottomFrame = result.getInt(7);
+                als.setBottomFrame(bottomFrame);
+                int depthCell = result.getInt(8);
+                als.setDepthCell(depthCell);
+                int countCells = result.getInt(9);
+                als.setCountCells(countCells);
+                int lcId = result.getInt(10);
+                LC lc =lcService.loadLCFromDB(lcId);
+                als.setLc(lc);
+                lc.setParentALS(als);
+                String positionLCId = result.getString(11);
+                als.setPositionLC(PositionLC.valueOf(positionLCId));
+                String colorDoor = result.getString("color_door");
+                als.setColorDoor(Colors.valueOf(colorDoor));
+                String colorBody = result.getString("color_body");
+                als.setColorBody(Colors.valueOf(colorBody));
+                als.setUniqueLB(lbService.loadLBListfromDB(alsId));
+                List<LB> lbList=new ArrayList<>();
+                for (Map.Entry<LB,Integer> lb:als.getUniqueLB().entrySet()) {
+                    for (int i = 0; i < lb.getValue(); i++) {
+                        lbList.add(lb.getKey());
+                    }
+                }
+                als.setLbList(lbList);
+                als.updateALS();
+                System.out.println("LOAD ALS..."+als.getDescription());
+            }
+        } catch (SQLException e) {
+            logger.error("Не удалось получить ALS" + e);
+            throw new SQLException(e);
+        }
+        return als;
+
     }
 }
